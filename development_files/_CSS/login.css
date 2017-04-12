@@ -1,0 +1,37 @@
+html, body, head,h1, input{ 
+		margin:			0;
+		padding:  		0;
+		background-image: url("house.jpg"); 
+}
+
+input{
+	text-align: 		center; 
+}
+
+#pw, #username{
+	position: 			relative;
+	text-align: 		center;
+}
+
+#loginForm{
+	border-radius: 		25px;
+	position: 			fixed;
+	top: 				50%;
+	background-color: 	black;
+	width: 				400px;
+	height: 			30%;
+	left: 				50%;
+	transform: 			translate(-50%, -50%);
+}
+
+table{
+	position: 			relative;
+	width:				100%;
+	color: 				white;
+	text-align: 		center;
+	top:				20px;
+}
+
+td{
+	padding: 			10px;
+}

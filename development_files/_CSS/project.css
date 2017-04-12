@@ -1,0 +1,83 @@
+html, body, head{ 
+		margin:			0;
+		padding:  		0; 
+		background-image: url("house.jpg"); 
+		background-repeat: no-repeat;
+
+}
+
+h1, input{
+	margin:			0;
+	padding:  		0; 
+}
+
+#header{
+	width: 				100%; 
+	background-color: 	#000000;
+	opacity: 			0.9;
+
+}
+
+a{
+	text-decoration: 	none;
+	color: 				white;
+}
+
+#login{
+	position: 			relative;
+	top: 				0;
+	right: 				5em;
+	position: 			fixed;
+}
+#register{
+	position: 			relative;
+	top: 				0;
+	right: 				0;
+	position: 			fixed;
+}
+
+h1{
+	position: 			relative;
+	text-align: 		center;
+	font-size: 			48px;
+	color: 				white;
+
+}
+
+form{
+	position: 			absolute;
+	top: 				35%;
+	margin: 			auto;
+	width:				100%;
+	text-align: 		center; 
+}
+
+input{
+	text-align: 		center; 
+}
+
+#forms{
+	opacity: 			0.9;
+	border-radius: 		25px;
+	position: 			fixed;
+	background-color: 	black;
+	width: 				50%;
+	height: 			20%;
+	top: 				50%;
+	left: 				50%;
+	transform: 			translate(-50%, -50%);
+}
+
+#searchBar{
+	position: 			relative;
+	top: 				25%;
+	padding:			10px 5px;
+	font-size: 			1.5em;
+	width:				70%; 
+}
+
+#submit{
+	position: 			relative;
+	top: 				50%;
+	width: 				10%;
+}
