@@ -25,7 +25,7 @@
 			<ul class="nav navbar-nav">
 			  <li><a href="home.php">Home</a></li>
 			  <li><a href="tenants.php">Tenants</a></li>
-			  <li><a href="#">Page 2</a></li>
+			  <li><a href="staff.php">Staff</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 			  <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
