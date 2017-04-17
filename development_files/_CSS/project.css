@@ -35,14 +35,6 @@ a{
 	position: 			fixed;
 }
 
-h1{
-	position: 			relative;
-	text-align: 		center;
-	font-size: 			48px;
-	color: 				white;
-
-}
-
 #submit{
 	position: 			relative;
 	top: 				50%;
