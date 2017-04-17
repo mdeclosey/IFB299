@@ -22,7 +22,7 @@
 		<div id="loginForm">
 			<table class="form-group table">
 			  	<tr>
-			    	<td colspan="0"><input type="text" id="username" placeholder="Username" autocomplete="off" class="form-control"></td>
+			    	<td colspan="0"><input type="text" id="username" placeholder="Email" autocomplete="off" class="form-control"></td>
 				</tr>
 			  	<tr>
 			    	<td colspan="0"><input type="password" placeholder="Password" id="pw" class="form-control"></td>
