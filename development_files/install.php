@@ -1,4 +1,13 @@
 <?php
+/*********************************
+ *	The intentions of this file is to allow for a quick
+ *  setup of the database. When modifying this file,
+ *  assume the database is empty.
+ *  
+ *  Always create at least 5 rows in each table!
+ *
+*********************************/
+
 // Connect to DB
 $db = mysqli_connect("localhost", "root", "", "ifb299_assignment");
 
@@ -58,6 +67,51 @@ mysqli_query($db, "
 		('Phil', 'Batman', 'bobby@example.com', '07 3344 5566'),
 		('Sam', 'Popeye', 'bobby@example.com', '07 3344 5566');") or die(failed('createStaff'));
 
+/***** add contracts table *****/
+mysqli_query($db, 
+	"CREATE TABLE IF NOT EXISTS Contracts(
+	contractID INT AUTO_INCREMENT,
+	propertyID INT NOT NULL,
+	tenantID INT NOT NULL,
+	startDate date NOT NULL,
+	endDate date NOT NULL,
+    PRIMARY KEY (contractID)
+	);"
+) or die(failed('createContractsTable'));
+
+/***** add contracts *****/
+mysqli_query($db, "
+	INSERT INTO contracts (propertyID, tenantID, startDate, endDate) VALUES 
+		('1', '1', '2014-01-01', '2014-07-01'),
+		('2', '2', '2015-01-01', '2015-07-01'),
+		('3', '3', '2016-01-01', '2016-07-01'),
+		('4', '4', '2017-01-01', '2017-07-01'),
+		('5', '5', '2018-01-01', '2018-07-01');") or die(failed('createContracts'));
+
+/***** add properties table *****/
+mysqli_query($db, 
+	"CREATE TABLE IF NOT EXISTS Properties(
+	propertyID INT AUTO_INCREMENT,
+	ownerID INT NOT NULL,
+	staffID INT NOT NULL,
+	street VARCHAR(60) NOT NULL,
+	suburb VARCHAR(60) NOT NULL,
+	postcode VARCHAR(60) NOT NULL,
+    PRIMARY KEY (propertyID)
+	);"
+) or die(failed('createPropertiesTable'));
+
+/***** add properties *****/
+mysqli_query($db, "
+	INSERT INTO properties (ownerID, staffID, street, suburb, postcode) VALUES 
+		('1', '1', '10 Adelaide Street', 'Brisbane', '4000'),
+		('2', '2', '20 Adelaide Street', 'Brisbane', '4000'),
+		('3', '3', '30 Adelaide Street', 'Brisbane', '4000'),
+		('4', '4', '40 Adelaide Street', 'Brisbane', '4000'),
+		('5', '5', '50 Adelaide Street', 'Brisbane', '4000');") or die(failed('createProperties'));
+
+
+
 
 
 
@@ -75,6 +129,6 @@ function failed($at) {
 }
 
 // end the transaction and commit
-mysqli_query($db, "COMMIT");
+mysqli_query($db, "END TRANSACTION;");
 echo '<span style="font-size: 3em; color: green">Success</span><br><br><a href="index.php">Leave now</a>';
 ?>
