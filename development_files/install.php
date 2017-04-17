@@ -1,4 +1,5 @@
 <?php
+include('config.php');
 /*********************************
  *	The intentions of this file is to allow for a quick
  *  setup of the database. When modifying this file,
@@ -9,15 +10,17 @@
 *********************************/
 
 // Connect to DB
-$db = mysqli_connect("localhost", "root", "", "ifb299_assignment");
+$db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 
 /***** check connection *****/
 if (mysqli_connect_errno()) {
 	echo '<br><br><br>Failed to connect to DB<br><br>
-	Ensure you have a MySQL server running on <b>localhost</b>, <br>with the <b>root</b><br>having <b>no password</b>.<br>The DB schema is named <b>ifb299_assignment</b>.';
+	Ensure you have a database setup on <b>'. $DB_SERVER .'</b> and the user <b><?php echo $DB_USER; ?></b> has the password \'<b> '.($DB_PASS != '' ? $DB_PASS : '<i>blank</i>') .'</b>\'.<br>
+		The database schema needs to be named <b>'. $DB_NAME. '</b></br>
+		These settings are set in <b>config.php</b>. This file is ignored by git so it is unique to you.<br>';
 	
-	echo '<br><br>Use this script to create the database and then run this installation script again.<br>';
-	echo '<span style="color: red">CREATE SCHEMA "ifb299_assignment"</span>';
+	echo '<br><br>Use the script below to create the database and then run this installation script again.<br>';
+	echo '<span style="color: red">CREATE SCHEMA "'. $DB_NAME. '"</span>';
 	exit;
 }
 
