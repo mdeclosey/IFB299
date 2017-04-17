@@ -6,34 +6,30 @@ if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
 		// if jquery caught the save click then it must have been validated already (but consider csrf)
-		$update = mysqli_query($db, "UPDATE tenants SET fname='{$_POST['fname']}', lname='{$_POST['lname']}', phone='{$_POST['phone']}', email='{$_POST['email']}' WHERE tenantID='{$_POST['id']}'");
+		$update = mysqli_query($db, "UPDATE staff SET fname='{$_POST['fname']}', lname='{$_POST['lname']}', phone='{$_POST['phone']}', email='{$_POST['email']}' WHERE staffID='{$_POST['id']}'");
 		
 		if ($update) {
-			header('location: tenants.php'); // redirect to prevent resubmit
+			header('location: staff.php'); // redirect to prevent resubmit
 		} else {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-<<<<<<< HEAD
-		//header('location: tenants.php');
-=======
-		header('location: tenants.php');
->>>>>>> origin/master
+		header('location: staff.php');
 	}
 }
 
 /***** Delete client *****/
 if (isset($_GET['delete'])) {
 	if (isset($_GET['id']) && $_GET['id'] > 0) {
-		$delete = mysqli_query($db, "DELETE FROM tenants WHERE tenantID={$_GET['id']}");
+		$delete = mysqli_query($db, "DELETE FROM staff WHERE staffID={$_GET['id']}");
 		
 		if ($delete) {
-			header('location: tenants.php'); // redirect to prevent resubmit
+			header('location: staff.php'); // redirect to prevent resubmit
 		} else {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: tenants.php');
+		header('location: staff.php');
 	}
 }
 ?>
@@ -42,13 +38,13 @@ if (isset($_GET['delete'])) {
 
 <?php
 
-// List tenants
+// List staff
 if (count($_GET) == 0) {
-	$tenantList = mysqli_query($db, "SELECT * FROM tenants");
+	$staffList = mysqli_query($db, "SELECT * FROM staff");
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			Tenants List
+			Staff List
 		</div>
 		<div class="panel-body">
 			<table class="table">
@@ -64,19 +60,19 @@ if (count($_GET) == 0) {
 			  </thead>
 				<tbody>
 					<?php
-					while ($client = mysqli_fetch_assoc($tenantList)) {
+					while ($client = mysqli_fetch_assoc($staffList)) {
 						echo "
 							<tr>
-							  <th scope='row'>{$client['tenantID']}</th>
+							  <th scope='row'>{$client['staffID']}</th>
 							  <td>{$client['fName']}</td>
 							  <td>{$client['lname']}</td>
 							  <td>{$client['email']}</td>
 							  <td>{$client['phone']}</td>
 							  <td>
-								<a href='tenants.php?edit&id={$client['tenantID']}' class='btn btn-success'>
+								<a href='staff.php?edit&id={$client['staffID']}' class='btn btn-success'>
 								  <span class='glyphicon glyphicon-edit'></span> Edit
 								</a>
-								<a href='tenants.php?delete&id={$client['tenantID']}' class='btn btn-danger'>
+								<a href='staff.php?delete&id={$client['staffID']}' class='btn btn-danger'>
 								  <span class='glyphicon glyphicon-trash'></span> Delete
 								</a>
 							  </td>
@@ -92,41 +88,41 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit tenant
+// Edit staff
 if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the tenant
-	$tenant = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM tenants WHERE tenantID={$_GET['id']}"));
+	// Get the staff
+	$staff = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM staff WHERE staffID={$_GET['id']}"));
 	
 ?>
-	<form action="tenants.php?save" method="post" id="frmEditTenant">
+	<form action="staff.php?save" method="post" id="frmEditStaff">
 		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit <?php echo "{$tenant['fName']} {$tenant['lname']}"; ?>
+				Edit <?php echo "{$staff['fName']} {$staff['lname']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">
 				  <label for="example-text-input" class="col-2 col-form-label">First Name</label>
 				  <div class="col-10">
-					<input class="form-control" type="text" value="<?php echo "{$tenant['fName']}"; ?>" id="fname" name="fname">
+					<input class="form-control" type="text" value="<?php echo "{$staff['fName']}"; ?>" id="fname" name="fname">
 				  </div>
 				</div>
 				<div class="form-group row">
 				  <label for="example-search-input" class="col-2 col-form-label">Last Name</label>
 				  <div class="col-10">
-					<input class="form-control" type="text" value="<?php echo "{$tenant['lname']}"; ?>" id="lname" name="lname">
+					<input class="form-control" type="text" value="<?php echo "{$staff['lname']}"; ?>" id="lname" name="lname">
 				  </div>
 				</div>
 				<div class="form-group row">
 				  <label for="example-email-input" class="col-2 col-form-label">Email</label>
 				  <div class="col-10">
-					<input class="form-control" type="email" value="<?php echo "{$tenant['email']}"; ?>" id="email" name="email">
+					<input class="form-control" type="email" value="<?php echo "{$staff['email']}"; ?>" id="email" name="email">
 				  </div>
 				</div>
 				<div class="form-group row">
 				  <label for="example-url-input" class="col-2 col-form-label">Phone</label>
 				  <div class="col-10">
-					<input class="form-control" type="text" value="<?php echo "{$tenant['phone']}"; ?>" id="phone" name="phone">
+					<input class="form-control" type="text" value="<?php echo "{$staff['phone']}"; ?>" id="phone" name="phone">
 				  </div>
 				</div>
 				<div class="form-group row">
@@ -147,7 +143,7 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) {
 		$(document).ready(function() {
 			// Cancel button pressed
 			$('#cancel').click(function() {
-				window.location.href = "tenants.php";
+				window.location.href = "staff.php";
 			});
 			
 			// Save button pressed
@@ -165,7 +161,7 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) {
 				{
 					alert('Ensure you have filled out the entire form.');
 				} else {
-					$("#frmEditTenant").submit();
+					$("#frmEditStaff").submit();
 				}
 			});
 		});
