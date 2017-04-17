@@ -52,8 +52,8 @@ if (count($_GET) == 0) {
 		tenants.fName,
 		tenants.lname
 		FROM contracts
-		INNER JOIN tenants ON tenants.tenantID=contracts.tenantID
-		INNER JOIN properties ON properties.propertyID=contracts.propertyID
+		LEFT JOIN tenants ON tenants.tenantID=contracts.tenantID
+		LEFT JOIN properties ON properties.propertyID=contracts.propertyID
 	") or die(mysqli_error($db));
 	?>
 	<div class="panel panel-primary">
@@ -112,7 +112,7 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) {
 	// Get the contract
 	$contract = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM contracts WHERE contractID={$_GET['id']}"));
 	$tenants = mysqli_query($db, "SELECT * FROM tenants");
-	$properties = mysqli_query($db, "SELECT * FROM properties INNER JOIN staff ON staff.staffID=properties.staffID");
+	$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID");
 ?>
 	<form action="contracts.php?save" method="post" id="frmEditContract">
 		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">

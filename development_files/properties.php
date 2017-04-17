@@ -43,8 +43,8 @@ if (isset($_GET['delete'])) {
 if (count($_GET) == 0) {
 	$propertyList = mysqli_query($db, "
 		SELECT *, staff.fName as staff_fname, staff.lname as staff_lname FROM properties 
-		INNER JOIN staff ON properties.staffID = staff.staffID
-		INNER JOIN owners ON properties.ownerID = owners.ownerID
+		LEFT JOIN staff ON properties.staffID = staff.staffID
+		LEFT JOIN owners ON properties.ownerID = owners.ownerID
 		") or die(mysqli_error($db));
 	?>
 	<div class="panel panel-primary">
