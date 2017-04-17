@@ -10,26 +10,30 @@ input{
 
 #pw, #username{
 	position: 			relative;
-	text-align: 		center;
+	text-align: 		left;
 }
 
 #loginForm{
-	border-radius: 		25px;
+	border: 			2px solid grey;
 	position: 			fixed;
 	top: 				50%;
-	background-color: 	black;
-	width: 				400px;
-	height: 			30%;
+	background-color: 	white;
+	width: 				250px;
 	left: 				50%;
 	transform: 			translate(-50%, -50%);
+	padding: 			1em;
 }
 
 table{
 	position: 			relative;
 	width:				100%;
-	color: 				white;
+	color: 				black;
 	text-align: 		center;
 	top:				20px;
+}
+
+table td:last-child input[type="button"]:first-child {
+	margin-right: 1em;
 }
 
 td{
