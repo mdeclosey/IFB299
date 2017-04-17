@@ -58,7 +58,12 @@ if (count($_GET) == 0) {
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			Contracts List
+			Contracts List 
+			<span style="float:right; margin-top: -5.5px">
+				<a href='contracts.php?new' class='btn btn-success btn-sm'>
+				  <span class='glyphicon glyphicon-plus'></span> New Contract
+				</a>
+			</span>
 		</div>
 		<div class="panel-body">
 			<table class="table">

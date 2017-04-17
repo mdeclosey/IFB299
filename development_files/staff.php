@@ -45,6 +45,11 @@ if (count($_GET) == 0) {
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			Staff List
+			<span style="float:right; margin-top: -5.5px">
+				<a href='staff.php?new' class='btn btn-success btn-sm'>
+				  <span class='glyphicon glyphicon-plus'></span> New Staff
+				</a>
+			</span>
 		</div>
 		<div class="panel-body">
 			<table class="table">
