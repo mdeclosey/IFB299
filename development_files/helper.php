@@ -1,6 +1,6 @@
 <?php
 // Connect to DB
-$db = mysqli_connect("localhost", "root", "", "my_db");
+$db = mysqli_connect("localhost", "root", "", "ifb299_assignment");
 
 // Check connection
 if (mysqli_connect_errno()) {
