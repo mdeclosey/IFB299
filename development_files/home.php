@@ -1,3 +1,5 @@
+<?php include('helper.php'); ?>
+
 <?php include('pageHeader.php'); ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">

@@ -1,5 +1,13 @@
 <?php
-include('config.php');
+if(file_exists('config.php')) {
+	include('config.php');
+} else {
+	echo 'Please create the <b>config.php</b> file. Copy and paste the following into it.';
+	echo '<br><br><span style="color:red">';
+	echo '&lt;?php $DB_SERVER = &quot;localhost&quot;; $DB_USER = &quot;root&quot;; $DB_PASS = &quot;&quot;; $DB_NAME = &quot;ifb299_assignment&quot;; ?&gt;';
+	echo '</span><br><br>';
+	exit;
+}
 /*********************************
  *	The intentions of this file is to allow for a quick
  *  setup of the database. When modifying this file,
@@ -15,7 +23,7 @@ $db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 /***** check connection *****/
 if (mysqli_connect_errno()) {
 	echo '<br><br><br>Failed to connect to DB<br><br>
-	Ensure you have a database setup on <b>'. $DB_SERVER .'</b> and the user <b><?php echo $DB_USER; ?></b> has the password \'<b> '.($DB_PASS != '' ? $DB_PASS : '<i>blank</i>') .'</b>\'.<br>
+	Ensure you have a database setup on <b>'. $DB_SERVER .'</b> and the user <b><?php echo $DB_USER; ?></b> has the password \'<b>'.($DB_PASS != '' ? $DB_PASS : '<i>blank</i>') .'</b>\'.<br>
 		The database schema needs to be named <b>'. $DB_NAME. '</b></br>
 		These settings are set in <b>config.php</b>. This file is ignored by git so it is unique to you.<br>';
 	

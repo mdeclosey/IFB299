@@ -1,5 +1,9 @@
 <?php
-include('config.php');
+if (file_exists(stream_resolve_include_path('config.php'))) {
+	include('config.php');
+} else {
+	header('location: install.php'); exit;
+}
 
 // Connect to DB
 $db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
