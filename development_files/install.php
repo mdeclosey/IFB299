@@ -110,6 +110,27 @@ mysqli_query($db, "
 		('4', '4', '40 Adelaide Street', 'Brisbane', '4000'),
 		('5', '5', '50 Adelaide Street', 'Brisbane', '4000');") or die(failed('createProperties'));
 
+/***** add owners table *****/
+mysqli_query($db, 
+	"CREATE TABLE IF NOT EXISTS Owners(
+	ownerID INT AUTO_INCREMENT,
+	fName varchar(40) NOT NULL,
+	lname varchar(40) NOT NULL,
+	email varchar(60) NOT NULL,
+	phone varchar(60) NOT NULL,
+    PRIMARY KEY (ownerID)
+	);"
+) or die(failed('createOwnersTable'));
+
+/***** add owner *****/
+mysqli_query($db, "
+	INSERT INTO owners (fname, lname, email, phone) VALUES 
+		('Adrian', 'Mathews', 'amat@example.com', '07 3344 5566'),
+		('Borris', 'Richard', 'booor@example.com', '07 3344 5566'),
+		('Craig', 'Chip', 'creg@example.com', '07 3344 5566'),
+		('Doug', 'Bird', 'dugg@example.com', '07 3344 5566'),
+		('Emily', 'Clean', 'clem@example.com', '07 3344 5566'),
+		('Danielle', 'Tan', 'tanielle@example.com', '07 3344 5566');") or die(failed('createOwners'));
 
 
 
