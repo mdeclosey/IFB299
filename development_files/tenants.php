@@ -14,11 +14,7 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-<<<<<<< HEAD
-		//header('location: tenants.php');
-=======
 		header('location: tenants.php');
->>>>>>> origin/master
 	}
 }
 
