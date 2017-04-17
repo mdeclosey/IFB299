@@ -5,7 +5,6 @@ CREATE TABLE Staff(
     email varchar(60) NOT NULL,
     phone INT NOT NULL,
     propertiesOwned NOT NULL,
-
 );
 
 INSERT INTO Staff (fname, lname, email, phone) VALUES (Bob, Jones, bobby@example.com, 55555555);

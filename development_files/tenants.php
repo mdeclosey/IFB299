@@ -2,15 +2,34 @@
 
 <?php
 /***** Edit client *****/
+if (isset($_GET['save'])) {
+	if (isset($_POST['id']) && $_POST['id'] > 0) {
+		// should perform server side form validation but meh,
+		// if jquery caught the save click then it must have been validated already (but consider csrf)
+		$update = mysqli_query($db, "UPDATE tenants SET fname='{$_POST['fname']}', lname='{$_POST['lname']}', phone='{$_POST['phone']}', email='{$_POST['email']}' WHERE tenantID='{$_POST['id']}'");
+		
+		if ($update) {
+			header('location: tenants.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
+	} else {
+		//header('location: tenants.php');
+	}
+}
 
 /***** Delete client *****/
-if (isset($_GET['delete']) && isset($_GET['id']) && $_GET['id'] > 0) {
-	$delete = mysqli_query($db, "DELETE FROM tenants WHERE tenantID={$_GET['id']}");
-	
-	if ($delete) {
-		header('location: tenants.php'); // redirect to prevent resubmit
+if (isset($_GET['delete'])) {
+	if (isset($_GET['id']) && $_GET['id'] > 0) {
+		$delete = mysqli_query($db, "DELETE FROM tenants WHERE tenantID={$_GET['id']}");
+		
+		if ($delete) {
+			header('location: tenants.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	} else {
-		echo mysqli_error($db); exit;
+		header('location: tenants.php');
 	}
 }
 ?>
@@ -19,9 +38,9 @@ if (isset($_GET['delete']) && isset($_GET['id']) && $_GET['id'] > 0) {
 
 <?php
 
-// List clients
+// List tenants
 if (count($_GET) == 0) {
-	$clientList = mysqli_query($db, "SELECT * FROM tenants");
+	$tenantList = mysqli_query($db, "SELECT * FROM tenants");
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
@@ -41,7 +60,7 @@ if (count($_GET) == 0) {
 			  </thead>
 				<tbody>
 					<?php
-					while ($client = mysqli_fetch_assoc($clientList)) {
+					while ($client = mysqli_fetch_assoc($tenantList)) {
 						echo "
 							<tr>
 							  <th scope='row'>{$client['tenantID']}</th>
@@ -55,7 +74,7 @@ if (count($_GET) == 0) {
 								</a>
 								<a href='tenants.php?delete&id={$client['tenantID']}' class='btn btn-danger'>
 								  <span class='glyphicon glyphicon-trash'></span> Delete
-								</button>
+								</a>
 							  </td>
 							</tr>
 						";
@@ -65,12 +84,90 @@ if (count($_GET) == 0) {
 			</table>
 		</div>
 	</div>
-	<script>
-		
-	</script>
 	<?php
 }
 
+
+// Edit tenant
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
+	// Get the tenant
+	$tenant = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM tenants WHERE tenantID={$_GET['id']}"));
+	
+?>
+	<form action="tenants.php?save" method="post" id="frmEditTenant">
+		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Edit <?php echo "{$tenant['fName']} {$tenant['lname']}"; ?>
+			</div>
+			<div class="panel-body" style="padding: 2em">
+				<div class="form-group row">
+				  <label for="example-text-input" class="col-2 col-form-label">First Name</label>
+				  <div class="col-10">
+					<input class="form-control" type="text" value="<?php echo "{$tenant['fName']}"; ?>" id="fname" name="fname">
+				  </div>
+				</div>
+				<div class="form-group row">
+				  <label for="example-search-input" class="col-2 col-form-label">Last Name</label>
+				  <div class="col-10">
+					<input class="form-control" type="text" value="<?php echo "{$tenant['lname']}"; ?>" id="lname" name="lname">
+				  </div>
+				</div>
+				<div class="form-group row">
+				  <label for="example-email-input" class="col-2 col-form-label">Email</label>
+				  <div class="col-10">
+					<input class="form-control" type="email" value="<?php echo "{$tenant['email']}"; ?>" id="email" name="email">
+				  </div>
+				</div>
+				<div class="form-group row">
+				  <label for="example-url-input" class="col-2 col-form-label">Phone</label>
+				  <div class="col-10">
+					<input class="form-control" type="text" value="<?php echo "{$tenant['phone']}"; ?>" id="phone" name="phone">
+				  </div>
+				</div>
+				<div class="form-group row">
+				  <div class="col-10">
+					<button type="button" id="save" class='btn btn-success'>
+					  <span class='glyphicon glyphicon-ok-circle'></span> Save
+					</button>
+					<button type="button" id="cancel" class='btn btn-secondary'>
+					  <span class='glyphicon glyphicon-remove-circle'></span> Cancel
+					</button>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<script>
+		$(document).ready(function() {
+			// Cancel button pressed
+			$('#cancel').click(function() {
+				window.location.href = "tenants.php";
+			});
+			
+			// Save button pressed
+			$('#save').click(function() {
+				var fname = $("#fname");
+				var lname = $("#lname");
+				var phone = $("#phone");
+				var email = $("#email");
+				
+				// validate form
+				if (fname.val() == '' ||
+					lname.val() == '' ||
+					phone.val() == '' ||
+					email.val() == '') 
+				{
+					alert('Ensure you have filled out the entire form.');
+				} else {
+					$("#frmEditTenant").submit();
+				}
+			});
+		});
+	</script>
+	<?php
+}
 ?>
 
 <?php include('pageFooter.php'); ?>
