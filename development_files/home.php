@@ -17,9 +17,14 @@
 			
 					if (isset($_GET['q'])) {
 						$searchQuery = mysqli_query($db, "SELECT * FROM properties WHERE street LIKE '%{$_GET['q']}%' OR suburb  LIKE '%{$_GET['q']}%'") or die(mysqli_error($db));
-						while ($result = mysqli_fetch_assoc($searchQuery)) {
-							echo "<div class=\"panel-body\"><a href=\"properties.php?id={$result['propertyID']}\">{$result['street']}, {$result['suburb']}, {$result['postcode']}</a></div>";
+						if (mysqli_num_rows($searchQuery) > 0) {
+							while ($result = mysqli_fetch_assoc($searchQuery)) {
+								echo "<div class=\"panel-body\"><a href=\"properties.php?view&id={$result['propertyID']}\">{$result['street']}, {$result['suburb']}, {$result['postcode']}</a></div>";
+							}
+						} else {
+							echo 'No results.';
 						}
+						
 					} else {
 						echo 'Nothing to show.';
 					}				

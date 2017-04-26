@@ -103,7 +103,7 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit property
+// Create/Edit property
 if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	isset($_GET['new'])) { 
 	
@@ -234,6 +234,32 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 		});
 	</script>
 	<?php
+}
+
+// View property
+if (isset($_GET['view'])) {
+	if (isset($_GET['id']) && $_GET['id'] > 0) {
+		// get property
+		$propQuery = mysqli_query($db, "SELECT * FROM properties WHERE propertyID={$_GET['id']}");
+		
+		if (mysqli_num_rows($propQuery) == 1) {
+			$prop = mysqli_fetch_assoc($propQuery);
+			?>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}"; ?>
+				</div>
+				<div class="panel-body">
+										
+				</div>
+			</div>
+		<?php
+		} else {
+			echo "Could not find property #{$_GET['id']}";
+		}
+	} else {
+		echo 'You must select a valid property.';
+	}
 }
 ?>
 

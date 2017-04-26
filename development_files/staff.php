@@ -100,7 +100,7 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit staff
+// Create/Edit staff
 if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	isset($_GET['new'])) { 
 	
