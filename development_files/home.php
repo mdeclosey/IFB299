@@ -3,14 +3,14 @@
 <?php include('pageHeader.php'); ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<div class="input-group">
-					<form action="home.php" method="get" id="frmSearch">
+				<form action="home.php" method="get" id="frmSearch">
+					<div class="input-group">
 						<input type="text" name="q" class="form-control" placeholder="Search for..." value="<?php echo isset($_GET['q']) ? $_GET['q'] : '' ?>">
 						<span class="input-group-btn">
 							<button class="btn btn-secondary btn-success" type="button" id="btnSearch">Go!</button>
 						</span>
-					</form>
-				</div>
+					</div>
+				</form>
 			</div>
 			<div class="panel-body">
 				<?php
