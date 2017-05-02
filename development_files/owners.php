@@ -1,7 +1,7 @@
 <?php include('helper.php'); ?>
 
 <?php
-/***** Edit client *****/
+/***** New/Edit owner *****/
 if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
@@ -14,7 +14,14 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: owners.php');
+		// new owner
+		$update = mysqli_query($db, "INSERT INTO owners (fname, lname, phone, email) VALUES('{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
+		
+		if ($update) {
+			header('location: owners.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	}
 }
 
@@ -93,17 +100,34 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit owner
-if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the owner
-	$owner = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM owners WHERE ownerID={$_GET['id']}"));
+// Create/Edit owner
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
+	isset($_GET['new'])) { 
+	
+	if (isset($_GET['edit'])) {
+		// edit mode
+		$owner = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM owners WHERE ownerID={$_GET['id']}"));
+		$action = 'Edit';
+	} else {
+		// create mode
+		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
+		$owner = [
+			'id' => '',
+			'fName' => '',
+			'lname' => '',
+			'email' => '',
+			'phone' => ''
+		];
+		
+		$action = 'New Owner';
+	}
 	
 ?>
 	<form action="owners.php?save" method="post" id="frmEditowner">
-		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit <?php echo "{$owner['fName']} {$owner['lname']}"; ?>
+				<?php echo "{$action} {$owner['fName']} {$owner['lname']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">

@@ -1,7 +1,7 @@
 <?php include('helper.php'); ?>
 
 <?php
-/***** Edit client *****/
+/***** Create/Edit client *****/
 if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
@@ -14,7 +14,14 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: tenants.php');
+		// new tenant
+		$update = mysqli_query($db, "INSERT INTO tenants (fname, lname, phone, email) VALUES('{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
+		
+		if ($update) {
+			header('location: tenants.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	}
 }
 
@@ -93,17 +100,33 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit tenant
-if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the tenant
-	$tenant = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM tenants WHERE tenantID={$_GET['id']}"));
+// Create/Edit tenant
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
+	isset($_GET['new'])) { 
 	
+	if (isset($_GET['edit'])) {
+		// edit mode
+		$tenant = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM tenants WHERE tenantID={$_GET['id']}"));
+		$action = 'Edit';
+	} else {
+		// create mode
+		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
+		$tenant = [
+			'id' => '',
+			'fName' => '',
+			'lname' => '',
+			'email' => '',
+			'phone' => ''
+		];
+		
+		$action = 'New Tenant';
+	}
 ?>
 	<form action="tenants.php?save" method="post" id="frmEditTenant">
-		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit <?php echo "{$tenant['fName']} {$tenant['lname']}"; ?>
+				<?php echo "{$action} {$tenant['fName']} {$tenant['lname']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">

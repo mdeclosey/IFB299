@@ -1,7 +1,7 @@
 <?php include('helper.php'); ?>
 
 <?php
-/***** Edit contract *****/
+/***** New/Edit contract *****/
 if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
@@ -15,7 +15,14 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: contracts.php');
+		// new contract
+		$update = mysqli_query($db, "INSERT INTO contracts (propertyID, tenantID, startDate, endDate) VALUES('{$_POST['propertyID']}', '{$_POST['tenantID']}', '{$_POST['startDate']}', '{$_POST['endDate']}')");
+		
+		if ($update) {
+			header('location: contracts.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	}
 }
 
@@ -54,6 +61,7 @@ if (count($_GET) == 0) {
 		FROM contracts
 		LEFT JOIN tenants ON tenants.tenantID=contracts.tenantID
 		LEFT JOIN properties ON properties.propertyID=contracts.propertyID
+		ORDER BY contracts.contractID ASC
 	") or die(mysqli_error($db));
 	?>
 	<div class="panel panel-primary">
@@ -107,18 +115,36 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit contract
-if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the contract
-	$contract = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM contracts WHERE contractID={$_GET['id']}"));
+// Create/Edit contract
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
+	isset($_GET['new'])) { 
+	
+	if (isset($_GET['edit'])) {
+		// edit mode
+		$contract = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM contracts WHERE contractID={$_GET['id']}"));
+		$action = 'Edit Contract #';
+	} else {
+		// create mode
+		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
+		$contract = [
+			'contractID' => '',
+			'tenantID' => '',
+			'tenantID' => '',
+			'endDate' => '',
+			'startDate' => ''
+		];
+		
+		$action = 'New Contract';
+	}
+	
 	$tenants = mysqli_query($db, "SELECT * FROM tenants");
 	$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID");
 ?>
 	<form action="contracts.php?save" method="post" id="frmEditContract">
-		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit Contract #<?php echo "{$_GET['id']}"; ?>
+				<?php echo "{$action} {$contract['contractID']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">

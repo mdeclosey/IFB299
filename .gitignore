@@ -1,5 +1,6 @@
 # Specified for IFB299 project
 /development_files/config.php
+/development_files/error.log
 
 # Windows image file caches
 Thumbs.db

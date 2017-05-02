@@ -1,7 +1,7 @@
 <?php include('helper.php'); ?>
 
 <?php
-/***** Edit property *****/
+/***** New/Edit property *****/
 if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
@@ -15,7 +15,14 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: properties.php');
+		// new property
+		$update = mysqli_query($db, "INSERT INTO properties (staffID, ownerID, street, suburb, postcode) VALUES('{$_POST['staffID']}', '{$_POST['ownerID']}', '{$_POST['street']}', '{$_POST['suburb']}', '{$_POST['postcode']}')");
+		
+		if ($update) {
+			header('location: properties.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	}
 }
 
@@ -96,18 +103,37 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit property
-if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the property
-	$property = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM properties WHERE propertyID={$_GET['id']}"));
+// Create/Edit property
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
+	isset($_GET['new'])) { 
+	
+	if (isset($_GET['edit'])) {
+		// edit mode
+		$property = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM properties WHERE propertyID={$_GET['id']}"));
+		$action = 'Edit Property #';
+	} else {
+		// create mode
+		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
+		$property = [
+			'propertyID' => '',
+			'street' => '',
+			'suburb' => '',
+			'postcode' => '',
+			'staffID' => '',
+			'ownerID' => ''
+		];
+		
+		$action = 'New Property';
+	}
+
 	$staff = mysqli_query($db, "SELECT * FROM staff");
 	$owners = mysqli_query($db, "SELECT * FROM owners");
 ?>
 	<form action="properties.php?save" method="post" id="frmEditProperty">
-		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit property #<?php echo "{$_GET['id']}"; ?>
+				<?php echo "{$action} {$property['propertyID']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">
@@ -208,6 +234,32 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) {
 		});
 	</script>
 	<?php
+}
+
+// View property
+if (isset($_GET['view'])) {
+	if (isset($_GET['id']) && $_GET['id'] > 0) {
+		// get property
+		$propQuery = mysqli_query($db, "SELECT * FROM properties WHERE propertyID={$_GET['id']}");
+		
+		if (mysqli_num_rows($propQuery) == 1) {
+			$prop = mysqli_fetch_assoc($propQuery);
+			?>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}"; ?>
+				</div>
+				<div class="panel-body">
+										
+				</div>
+			</div>
+		<?php
+		} else {
+			echo "Could not find property #{$_GET['id']}";
+		}
+	} else {
+		echo 'You must select a valid property.';
+	}
 }
 ?>
 

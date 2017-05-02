@@ -1,7 +1,7 @@
 <?php include('helper.php'); ?>
 
 <?php
-/***** Edit client *****/
+/***** New/Edit client *****/
 if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
@@ -14,7 +14,14 @@ if (isset($_GET['save'])) {
 			echo mysqli_error($db); exit;
 		}
 	} else {
-		header('location: staff.php');
+		// new staff
+		$update = mysqli_query($db, "INSERT INTO staff (fname, lname, phone, email) VALUES('{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
+		
+		if ($update) {
+			header('location: staff.php'); // redirect to prevent resubmit
+		} else {
+			echo mysqli_error($db); exit;
+		}
 	}
 }
 
@@ -93,17 +100,34 @@ if (count($_GET) == 0) {
 }
 
 
-// Edit staff
-if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0) { 
-	// Get the staff
-	$staff = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM staff WHERE staffID={$_GET['id']}"));
+// Create/Edit staff
+if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
+	isset($_GET['new'])) { 
+	
+	if (isset($_GET['edit'])) {
+		// edit mode
+		$staff = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM staff WHERE staffID={$_GET['id']}"));
+		$action = 'Edit';
+	} else {
+		// create mode
+		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
+		$staff = [
+			'id' => '',
+			'fName' => '',
+			'lname' => '',
+			'email' => '',
+			'phone' => ''
+		];
+		
+		$action = 'New Staff';
+	}
 	
 ?>
 	<form action="staff.php?save" method="post" id="frmEditStaff">
-		<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Edit <?php echo "{$staff['fName']} {$staff['lname']}"; ?>
+				<?php echo "{$action} {$staff['fName']} {$staff['lname']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
 				<div class="form-group row">
