@@ -6,9 +6,9 @@ if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
 		// if jquery caught the save click then it must have been validated already (but consider csrf)
-		print_r($_POST);
 		$update = mysqli_query($db, "UPDATE contracts SET propertyID='{$_POST['propertyID']}', tenantID='{$_POST['tenantID']}', startDate='{$_POST['startDate']}', endDate='{$_POST['endDate']}' WHERE contractID='{$_POST['id']}'");
 		
+		// if the update was successful
 		if ($update) {
 			header('location: contracts.php'); // redirect to prevent resubmit
 		} else {
@@ -18,6 +18,7 @@ if (isset($_GET['save'])) {
 		// new contract
 		$update = mysqli_query($db, "INSERT INTO contracts (propertyID, tenantID, startDate, endDate) VALUES('{$_POST['propertyID']}', '{$_POST['tenantID']}', '{$_POST['startDate']}', '{$_POST['endDate']}')");
 		
+		// if the update was successful
 		if ($update) {
 			header('location: contracts.php'); // redirect to prevent resubmit
 		} else {
@@ -47,7 +48,7 @@ if (isset($_GET['delete'])) {
 <?php
 
 // List contracts
-if (count($_GET) == 0) {
+if (count($_GET) == 0) { // this line checks we are only listing contracts, nothing else
 	$contractList = mysqli_query($db, "
 		SELECT 
 		contracts.contractID, 
@@ -87,6 +88,8 @@ if (count($_GET) == 0) {
 			  </thead>
 				<tbody>
 					<?php
+					
+					// loop over each contract and display it
 					while ($contract = mysqli_fetch_assoc($contractList)) {
 						echo "
 							<tr>
@@ -115,7 +118,7 @@ if (count($_GET) == 0) {
 }
 
 
-// Create/Edit contract
+// Create/Edit contract form
 if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	isset($_GET['new'])) { 
 	
