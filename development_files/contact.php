@@ -18,9 +18,9 @@ if (count($_GET) == 0) {
 			<table class="table">
 			  <thead>
 				<tr>
-				  <th>Name</th>
-				  <th>Email</th>
-				  <th>Phone</th>
+				  <th>Staff Member</th>
+				  <th>Staff Email</th>
+				  <th>Contact Number</th>
 				</tr>
 			  </thead>
 				<tbody>
@@ -35,7 +35,7 @@ if (count($_GET) == 0) {
 							</tr>
 						";
 					}
-	}	
+}	
 					?>
 				</tbody>
 			</table>
