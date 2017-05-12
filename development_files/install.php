@@ -144,11 +144,27 @@ mysqli_query($db, "
 		('Danielle', 'Tan', 'tanielle@example.com', '07 3344 5566');") or die(failed('createOwners'));
 
 
+/***** add property_views table *****/
+mysqli_query($db,
+    "CREATE TABLE IF NOT EXISTS property_views(
+        id int AUTO_INCREMENT,
+        property_id INT,
+        start_datetime, TIME NOT NULL 
+        end_time, TIME NOT NULL,
+        staff_id INT NOT NULL
+        PRIMARY KEY ID
+        );"
+) or die(failed('createPropertyViewsTables'));
 
 
-
-
-
+/***** add property view times *****/
+mysqli_query($db, "
+    INSERT INTO property_views(id, property_id, start_datetime, end_datetime, staff_id) VALUES
+      ('1','1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
+      ('2','2', '2017-06-02 13:00:00', '2017-06-01 13:15:00', '2'),
+      ('3','3', '2017-06-03 12:00:00', '2017-06-01 12:15:00', '3'),
+      ('4','4', '2017-06-04 12:00:00', '2017-06-01 12:15:00', '4')
+      ('5','5', '2017-06-05 12:00:00', '2017-06-01 12:15:00', '5');") or die(failed('createPropertyViews'));
 
 
 /***** do not edit below *****/
