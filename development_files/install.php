@@ -144,15 +144,18 @@ mysqli_query($db, "
 		('Danielle', 'Tan', 'tanielle@example.com', '07 3344 5566');") or die(failed('createOwners'));
 
 
+
 /***** add property_views table *****/
 mysqli_query($db,
     "CREATE TABLE IF NOT EXISTS property_views(
         id int AUTO_INCREMENT,
-        property_id INT,
+        propertyID INT,
         start_datetime, TIME NOT NULL 
         end_time, TIME NOT NULL,
-        staff_id INT NOT NULL
+        staffID INT NOT NULL
         PRIMARY KEY ID
+        FOREIGN KEY propertyID REFERENCES Properties,
+        FOREIGN KEY staffID REFERENCES Staff
         );"
 ) or die(failed('createPropertyViewsTables'));
 
@@ -167,7 +170,6 @@ mysqli_query($db, "
       ('5','5', '2017-06-05 12:00:00', '2017-06-01 12:15:00', '5');") or die(failed('createPropertyViews'));
 
 
-/***** do not edit below *****/
 function failed($at) {
 	global $db;
 	echo '<span style="font-size: 3em; color: red">Failed @ ' . $at. ' </span>';
