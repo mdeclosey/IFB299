@@ -22,18 +22,77 @@
 			<div class="navbar-header">
 			  <a class="navbar-brand" href="#">David's Houses</a>
 			</div>
-			<ul class="nav navbar-nav">
-			  <li><a href="home.php">Home</a></li>
-			  <li><a href="tenants.php">Tenants</a></li>
-			  <li><a href="staff.php">Staff</a></li>
-			  <li><a href="owners.php">Owners</a></li>
-			  <li><a href="contracts.php">Contracts</a></li>
-			  <li><a href="properties.php">Properties</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-			  <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-			  <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			</ul>
+				<?php
+					$navBarItems = [
+						[
+							'name' => 'Home',
+							'url' => 'home.php'
+						],
+						[
+							'name' => 'Tenants',
+							'url' => 'tenants.php'
+						],
+						[
+							'name' => 'Staff',
+							'url' => 'staff.php'
+						],
+						[
+							'name' => 'Owners',
+							'url' => 'owners.php'
+						],
+						[
+							'name' => 'Contracts',
+							'url' => 'contracts.php'
+						],
+						[
+							'name' => 'Properties',
+							'url' => 'properties.php'
+						]
+					];
+					
+					$navBarQuickLinks = [
+						[
+							'name' => 'Sign Up',
+							'url' => 'register.php',
+							'icon' => 'glyphicon glyphicon-user'
+						],
+						[
+							'name' => 'Login',
+							'url' => 'login.php',
+							'icon' => 'glyphicon glyphicon-log-in'
+						],
+						[
+							'name' => 'Contact',
+							'url' => 'contact',
+							'icon' => 'glyphicon glyphicon-pencil'
+						],
+						
+					];
+					
+					/* Print the features list navbar */
+					echo '<ul class="nav navbar-nav">';
+					foreach ($navBarItems as $nbItem) {
+						if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
+							echo '<li class="active">';
+						} else {
+							echo '<li>';
+						}
+						echo "<a href=\"{$nbItem['url']}\">{$nbItem['name']}</a></li>";
+					}
+					echo '</ul>';
+					
+					/* Print the auth list navbar (this one has icons) */
+					echo '<ul class="nav navbar-nav navbar-right">';
+					foreach ($navBarQuickLinks as $nbItem) {
+						if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
+							echo '<li class="active">';
+						} else {
+							echo '<li>';
+						}
+						echo "<a href=\"{$nbItem['url']}\"><span class=\"{$nbItem['icon']}\"></span> {$nbItem['name']}</a></li>";
+					}
+					echo '</ul>';
+				?>
 		  </div>
 		</nav>
 	

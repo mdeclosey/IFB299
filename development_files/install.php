@@ -148,26 +148,24 @@ mysqli_query($db, "
 /***** add property_views table *****/
 mysqli_query($db,
     "CREATE TABLE IF NOT EXISTS property_views(
-        id int AUTO_INCREMENT,
+        id INT AUTO_INCREMENT,
         propertyID INT,
-        start_datetime, TIME NOT NULL 
-        end_time, TIME NOT NULL,
-        staffID INT NOT NULL
-        PRIMARY KEY ID
-        FOREIGN KEY propertyID REFERENCES Properties,
-        FOREIGN KEY staffID REFERENCES Staff
+        start_datetime DATETIME NOT NULL,
+        end_datetime DATETIME NOT NULL,
+        staffID INT NOT NULL,
+        PRIMARY KEY (id)
         );"
 ) or die(failed('createPropertyViewsTables'));
 
 
 /***** add property view times *****/
 mysqli_query($db, "
-    INSERT INTO property_views(id, property_id, start_datetime, end_datetime, staff_id) VALUES
-      ('1','1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
-      ('2','2', '2017-06-02 13:00:00', '2017-06-01 13:15:00', '2'),
-      ('3','3', '2017-06-03 12:00:00', '2017-06-01 12:15:00', '3'),
-      ('4','4', '2017-06-04 12:00:00', '2017-06-01 12:15:00', '4')
-      ('5','5', '2017-06-05 12:00:00', '2017-06-01 12:15:00', '5');") or die(failed('createPropertyViews'));
+    INSERT INTO property_views(id, propertyID, start_datetime, end_datetime, staffID) VALUES
+      ('1', '1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
+      ('2', '2', '2017-06-02 13:00:00', '2017-06-01 13:15:00', '2'),
+      ('3', '3', '2017-06-03 12:00:00', '2017-06-01 12:15:00', '3'),
+      ('4', '4', '2017-06-04 12:00:00', '2017-06-01 12:15:00', '4'),
+      ('5', '5', '2017-06-05 12:00:00', '2017-06-01 12:15:00', '5');") or die(failed('createPropertyViews'));
 
 
 function failed($at) {
