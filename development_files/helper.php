@@ -9,32 +9,42 @@ if (file_exists(stream_resolve_include_path('config.php'))) {
 
 // Connect to DB
 if (isset($DB_SERVER) && isset($DB_USER) && isset($DB_PASS) && isset($DB_NAME)) {
-	$db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
-	
-	// Check connection
-	if (mysqli_connect_errno()) {
-		echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		?>
-		<div style="width: 100%; height: 100%; background-color: white; padding :1em; border: 5px solid black; font-size: 3em; z-index:999999999999">
-			Ensure you have a database setup on <b><?php echo $DB_SERVER; ?></b> and the user <b><?php echo $DB_USER; ?></b> has the password '<b><?php echo ($DB_PASS != '' ? $DB_PASS : '<i>blank</i>'); ?></b>'.<br>
-			The database schema needs to be named <b><?php echo $DB_NAME; ?></b></br>
-			These settings are set in <b>config.php</b>. This file is ignored by git so it is unique to you.<br>
-			If you have not ran the installation then click <a href="install.php">here</a>.<br>
-		</div>	
-		<?php
-	} else {
-		// success
-		// now check there are tables in the database
-		$tblChk = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(*) as num_tables FROM information_schema.tables WHERE table_schema = '{$DB_NAME}'"));
-		if ($tblChk['num_tables'] == 0) {
-			// no tables, throw an error
+	try {
+		$dsn = "mysql:host=$DB_SERVER;dbname=$DB_NAME;charset=utf8";
+		$opt = [
+			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_EMULATE_PREPARES   => false,
+		];
+		
+		$db = new PDO($dsn, $DB_USER, $DB_PASS, $opt);
+	} catch (Exception $e) {
+		// Check connection
+			echo "Failed to connect to MySQL: " . $e->getMessage();
 			?>
 			<div style="width: 100%; height: 100%; background-color: white; padding :1em; border: 5px solid black; font-size: 3em; z-index:999999999999">
-				There are no tables in the database. Have you ran the installation script?
+				Ensure you have a database setup on <b><?php echo $DB_SERVER; ?></b> and the user <b><?php echo $DB_USER; ?></b> has the password '<b><?php echo ($DB_PASS != '' ? $DB_PASS : '<i>blank</i>'); ?></b>'.<br>
+				The database schema needs to be named <b><?php echo $DB_NAME; ?></b></br>
+				These settings are set in <b>config.php</b>. This file is ignored by git so it is unique to you.<br>
 				If you have not ran the installation then click <a href="install.php">here</a>.<br>
 			</div>	
 			<?php
-		}
+
+	}
+	
+	// success
+	// now check there are tables in the database
+	$tblChk = $db->prepare("SELECT COUNT(*) as num_tables FROM information_schema.tables WHERE table_schema = '{$DB_NAME}'");
+	$tblChk->execute();
+	$tblChk = $tblChk->fetchAll()[0];
+	if ($tblChk['num_tables'] == 0) {
+		// no tables, throw an error
+		?>
+		<div style="width: 100%; height: 100%; background-color: white; padding :1em; border: 5px solid black; font-size: 3em; z-index:999999999999">
+			There are no tables in the database. Have you ran the installation script?
+			If you have not ran the installation then click <a href="install.php">here</a>.<br>
+		</div>	
+		<?php
 	}
 	
 } else {

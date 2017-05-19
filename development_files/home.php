@@ -17,8 +17,8 @@ include('helper.php');
 			<div class="panel-body">
 				
 				<?php
-					$test = new Tenant();
-					$test::abc();
+					$test = new Tenant($db);
+					$test::gets();
 				?>
 			
 				<?php
