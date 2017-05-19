@@ -1,4 +1,6 @@
-<?php include('helper.php'); ?>
+<?php 
+include('helper.php'); 
+?>
 
 <?php include('pageHeader.php'); ?>
 		<div class="panel panel-primary">
@@ -13,6 +15,12 @@
 				</form>
 			</div>
 			<div class="panel-body">
+				
+				<?php
+					$test = new Tenant();
+					$test::abc();
+				?>
+			
 				<?php
 			
 					if (isset($_GET['q'])) {

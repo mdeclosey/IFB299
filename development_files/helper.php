@@ -1,4 +1,6 @@
 <?php
+require_once("Autoloader.php");
+
 if (file_exists(stream_resolve_include_path('config.php'))) {
 	include('config.php');
 } else {
