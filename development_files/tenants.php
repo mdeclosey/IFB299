@@ -47,7 +47,9 @@ if (isset($_GET['delete'])) {
 
 // List tenants
 if (count($_GET) == 0) {
-	$tenantList = mysqli_query($db, "SELECT * FROM tenants");
+	$clients = new Tenant($db);
+	$clients->gets();
+	print_r($clients);
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
@@ -72,7 +74,7 @@ if (count($_GET) == 0) {
 			  </thead>
 				<tbody>
 					<?php
-					while ($client = mysqli_fetch_assoc($tenantList)) {
+					foreach ($clients as $client) {
 						echo "
 							<tr>
 							  <th scope='row'>{$client['tenantID']}</th>

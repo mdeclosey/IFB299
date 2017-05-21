@@ -15,14 +15,8 @@ include('helper.php');
 				</form>
 			</div>
 			<div class="panel-body">
+				<?php
 				
-				<?php
-					$test = new Tenant($db);
-					$test::gets();
-				?>
-			
-				<?php
-			
 					if (isset($_GET['q'])) {
 						$searchQuery = mysqli_query($db, "SELECT * FROM properties WHERE street LIKE '%{$_GET['q']}%' OR suburb  LIKE '%{$_GET['q']}%'") or die(mysqli_error($db));
 						if (mysqli_num_rows($searchQuery) > 0) {

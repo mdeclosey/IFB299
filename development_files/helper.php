@@ -18,6 +18,7 @@ if (isset($DB_SERVER) && isset($DB_USER) && isset($DB_PASS) && isset($DB_NAME)) 
 		];
 		
 		$db = new PDO($dsn, $DB_USER, $DB_PASS, $opt);
+		$db->setFetchMode(PDO::FETCH_ASSOC);
 	} catch (Exception $e) {
 		// Check connection
 			echo "Failed to connect to MySQL: " . $e->getMessage();
@@ -37,6 +38,7 @@ if (isset($DB_SERVER) && isset($DB_USER) && isset($DB_PASS) && isset($DB_NAME)) 
 	$tblChk = $db->prepare("SELECT COUNT(*) as num_tables FROM information_schema.tables WHERE table_schema = '{$DB_NAME}'");
 	$tblChk->execute();
 	$tblChk = $tblChk->fetchAll()[0];
+	
 	if ($tblChk['num_tables'] == 0) {
 		// no tables, throw an error
 		?>

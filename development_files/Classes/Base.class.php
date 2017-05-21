@@ -10,7 +10,7 @@ abstract class Base {
 	 * Access the globally declared database connection
 	 * Dirty but hey, it works! #prototype
 	 */
-	public $db;
+	public static $db;
 	
 	/**
 	 * The constructor is called when a new instance of the object is created
