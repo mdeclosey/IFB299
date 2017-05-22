@@ -147,25 +147,49 @@ mysqli_query($db, "
 
 /***** add property_views table *****/
 mysqli_query($db,
-    "CREATE TABLE IF NOT EXISTS property_views(
+    "CREATE TABLE IF NOT EXISTS PropertyViews(
         id INT AUTO_INCREMENT,
         propertyID INT,
-        start_datetime DATETIME NOT NULL,
-        end_datetime DATETIME NOT NULL,
+        start_datetime DateTime NOT NULL,
+	end_dateTime DateTime NOT NULL,
         staffID INT NOT NULL,
-        PRIMARY KEY (id)
+        PRIMARY KEY (ID)
         );"
 ) or die(failed('createPropertyViewsTables'));
 
 
 /***** add property view times *****/
 mysqli_query($db, "
-    INSERT INTO property_views(id, propertyID, start_datetime, end_datetime, staffID) VALUES
-      ('1', '1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
-      ('2', '2', '2017-06-02 13:00:00', '2017-06-01 13:15:00', '2'),
-      ('3', '3', '2017-06-03 12:00:00', '2017-06-01 12:15:00', '3'),
-      ('4', '4', '2017-06-04 12:00:00', '2017-06-01 12:15:00', '4'),
-      ('5', '5', '2017-06-05 12:00:00', '2017-06-01 12:15:00', '5');") or die(failed('createPropertyViews'));
+    INSERT INTO PropertyViews(id, propertyID, start_datetime, end_dateTime, staffID) VALUES
+      ('1','1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
+      ('2','2', '2017-06-02 13:00:00', '2017-06-02 12:15:00', '2'),
+      ('3','3', '2017-06-03 12:00:00', '2017-06-03 12:15:00', '3'),
+      ('4','4', '2017-06-04 12:00:00', '2017-06-04 12:15:00', '4');"
+) or die(failed('createPropertyViews'));
+
+
+/***** add property_images table *****/
+mysqli_query($db,
+    "CREATE TABLE IF NOT EXISTS propertyImages(
+      id INT AUTO_INCREMENT,
+      propertyID INT NOT NULL,
+      URL_TO_IMAGE VARCHAR(200),
+	PRIMARY KEY (id)
+      );"
+) or die(failed("createPropertyImagesTable"));
+
+
+
+/***** add property image items *****/
+mysqli_query($db,
+    "INSERT INTO propertyImages(id, propertyID, URL_TO_IMAGE) VALUES
+    ('1', '1', 'images/house1/house1a.jpg,images/house1/house1b.jpg'),
+    ('2', '2', 'images/house1/house2a.jpg,images/house1/house2b.jpg'),
+    ('3', '3', 'images/house1/house3a.jpg,images/house1/house3b.jpg'),
+    ('4', '4', 'images/house1/house4a.jpg,images/house1/house4b.jpg'),
+    ('5', '5', 'images/house1/house5a.jpg,images/house1/house5b.jpg')");
+
+
 
 
 function failed($at) {
