@@ -257,10 +257,16 @@ if (isset($_GET['view'])) {
 			$prop = mysqli_fetch_assoc($propQuery);
 			$staffassoc = mysqli_query($db, "SELECT * FROM staff WHERE staffID={$prop['staffID']}");
 			$propStaff = mysqli_fetch_assoc($staffassoc);
+			$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']}");
+			$propTimes = mysqli_fetch_assoc($timesassoc);
+			$startdate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['start_datetime']));
+			$enddate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['end_dateTime']));
 			?>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}<br>INSERT PHOTOS HERE<br>INSERT VIEWING TIMES HERE<br>"; ?>
+					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}<br>INSERT IMAGES <br>"; ?>
+					<?php  echo "Inspection Times: {$startdate} til {$enddate}<br>";?>
+					
 					<?php echo "Agent: {$propStaff['fName']} {$propStaff['lname']} <br>Contact Email: {$propStaff['email']}<br>Phone Number: {$propStaff['phone']}"; ?>
 				</div>
 				<div class="panel-body">

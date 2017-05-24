@@ -16,10 +16,12 @@ if(file_exists('config.php')) {
  *  Always create at least 5 rows in each table!
  *
 *********************************/
-mysqli_query("DROP SCHEMA ifb299_assignment");
-mysqli_query("CREATE SCHEMA ifb299_assignment");
+
 
 // Connect to DB
+$db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
+mysqli_query($db,"DROP SCHEMA ifb299_assignment");
+mysqli_query($db,"CREATE SCHEMA ifb299_assignment");
 $db = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 
 /***** check connection *****/
@@ -36,7 +38,6 @@ if (mysqli_connect_errno()) {
 
 /***** start installation *****/
 mysqli_query($db, "START TRANSACTION");
-
 
 /***** add staff table *****/
 mysqli_query($db, 
