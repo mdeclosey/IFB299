@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (file_exists(stream_resolve_include_path('config.php'))) {
 	include('config.php');
 } else {
