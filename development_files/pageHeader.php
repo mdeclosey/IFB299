@@ -8,6 +8,7 @@
 			if ($_SERVER['PHP_SELF'] == '/login.php') { echo '<link rel="stylesheet" href="_CSS/login.css">'; }
 		?>
 		<link rel="stylesheet" href="_CSS/project.css">
+		<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 	   
 		<!-- Bootstrap CDN -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
