@@ -1,4 +1,5 @@
 <?php
-unset($_SESSION);
-header('location: index.php');
+session_start();
+session_destroy();
+header('location: home.php');
 ?>

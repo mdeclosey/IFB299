@@ -39,6 +39,8 @@ mysqli_query($db, "START TRANSACTION");
 mysqli_query($db, 
 	"CREATE TABLE IF NOT EXISTS Staff(
 	staffID INT AUTO_INCREMENT,
+	username varchar(40) NOT NULL,
+	password varchar(40) NOT NULL,
 	fName varchar(40) NOT NULL,
 	lname varchar(40) NOT NULL,
 	email varchar(60) NOT NULL,
@@ -49,18 +51,20 @@ mysqli_query($db,
 
 /***** add staff *****/
 mysqli_query($db, "
-	INSERT INTO staff (fname, lname, email, phone) VALUES 
-		('Bob', 'Jones', 'bobby@example.com', '07 3344 5566'),
-		('David', 'Allen', 'DavidAllen@example.com', '07 3344 5566'),
-		('Greg', 'Davies', 'Greg@example.com', '07 3344 5566'),
-		('Bob', 'Jones', 'bobby@example.com', '07 3344 5566'),
-		('Phil', 'Dunphy', 'phil@example.com', '07 3344 5566'),
-		('Luke', 'Dunphy', 'luke@example.com', '07 3344 5566');") or die(failed('createStaff'));
+	INSERT INTO staff (username, password, fname, lname, email, phone) VALUES 
+		('david', 'jonesb', 'David', 'Jones', 'bobby@example.com', '07 3344 5566'),
+		('dallen', 'allend', 'David', 'Allen', 'DavidAllen@example.com', '07 3344 5566'),
+		('gavies', 'dreg', 'Greg', 'Davies', 'Greg@example.com', '07 3344 5566'),
+		('bobjones', 'jonies', 'Bob', 'Jones', 'bobby@example.com', '07 3344 5566'),
+		('phildun', 'dundundun', 'Phil', 'Dunphy', 'phil@example.com', '07 3344 5566'),
+		('lukeee', 'phy', 'Luke', 'Dunphy', 'luke@example.com', '07 3344 5566');") or die(failed('createStaff'));
 
 /***** add tenants table *****/
 mysqli_query($db, 
 	"CREATE TABLE IF NOT EXISTS Tenants(
 	tenantID INT AUTO_INCREMENT,
+	username varchar(40) NOT NULL,
+	password varchar(40) NOT NULL,
 	fName varchar(40) NOT NULL,
 	lname varchar(40) NOT NULL,
 	email varchar(60) NOT NULL,
@@ -71,12 +75,12 @@ mysqli_query($db,
 
 /***** add tenants *****/
 mysqli_query($db, "
-	INSERT INTO tenants (fname, lname, email, phone) VALUES 
-		('Bill', 'Jackson', 'bobby@example.com', '07 3344 5566'),
-		('Daniel', 'Aaron', 'DavidAllen@example.com', '07 3344 5566'),
-		('George', 'Doorstep', 'Greg@example.com', '07 3344 5566'),
-		('Phil', 'Batman', 'bobby@example.com', '07 3344 5566'),
-		('Sam', 'Popeye', 'bobby@example.com', '07 3344 5566');") or die(failed('createStaff'));
+	INSERT INTO tenants (username, password, fname, lname, email, phone) VALUES 
+		('billbo', 'jackson', 'Bill', 'Jackson', 'bobby@example.com', '07 3344 5566'),
+		('danielaa', 'A-A-RON', 'Daniel', 'Aaron', 'DavidAllen@example.com', '07 3344 5566'),
+		('georgestairs', 'clipclopclipclop', 'George', 'Doorstep', 'Greg@example.com', '07 3344 5566'),
+		('batman', 'androbin', 'Phil', 'Batman', 'bobby@example.com', '07 3344 5566'),
+		('spinachsam', 'ripped', 'Sam', 'Popeye', 'bobby@example.com', '07 3344 5566');") or die(failed('createStaff'));
 
 /***** add contracts table *****/
 mysqli_query($db, 
@@ -125,6 +129,8 @@ mysqli_query($db, "
 mysqli_query($db, 
 	"CREATE TABLE IF NOT EXISTS Owners(
 	ownerID INT AUTO_INCREMENT,
+	username varchar(40) NOT NULL,
+	password varchar(40) NOT NULL,
 	fName varchar(40) NOT NULL,
 	lname varchar(40) NOT NULL,
 	email varchar(60) NOT NULL,
@@ -135,13 +141,13 @@ mysqli_query($db,
 
 /***** add owner *****/
 mysqli_query($db, "
-	INSERT INTO owners (fname, lname, email, phone) VALUES 
-		('Adrian', 'Mathews', 'amat@example.com', '07 3344 5566'),
-		('Borris', 'Richard', 'booor@example.com', '07 3344 5566'),
-		('Craig', 'Chip', 'creg@example.com', '07 3344 5566'),
-		('Doug', 'Bird', 'dugg@example.com', '07 3344 5566'),
-		('Emily', 'Clean', 'clem@example.com', '07 3344 5566'),
-		('Danielle', 'Tan', 'tanielle@example.com', '07 3344 5566');") or die(failed('createOwners'));
+	INSERT INTO owners (username, password, fname, lname, email, phone) VALUES 
+		('amathews', 'amat', 'Adrian', 'Mathews', 'amat@example.com', '07 3344 5566'),
+		('brichard', 'brich', 'Borris', 'Richard', 'booor@example.com', '07 3344 5566'),
+		('cc', 'cchi', 'Craig', 'Chip', 'creg@example.com', '07 3344 5566'),
+		('dougb', 'doug', 'Doug', 'Bird', 'dugg@example.com', '07 3344 5566'),
+		('em', 'clean', 'Emily', 'Clean', 'clem@example.com', '07 3344 5566'),
+		('dantan', 'ielle', 'Danielle', 'Tan', 'tanielle@example.com', '07 3344 5566');") or die(failed('createOwners'));
 
 
 
@@ -182,15 +188,28 @@ mysqli_query($db,
 
 /***** add property image items *****/
 mysqli_query($db,
-    "INSERT INTO propertyImages(id, propertyID, URL_TO_IMAGE) VALUES
-    ('1', '1', 'images/house1/house1a.jpg,images/house1/house1b.jpg'),
-    ('2', '2', 'images/house1/house2a.jpg,images/house1/house2b.jpg'),
-    ('3', '3', 'images/house1/house3a.jpg,images/house1/house3b.jpg'),
-    ('4', '4', 'images/house1/house4a.jpg,images/house1/house4b.jpg'),
-    ('5', '5', 'images/house1/house5a.jpg,images/house1/house5b.jpg')");
+    "INSERT INTO propertyImages(propertyID, URL_TO_IMAGE) VALUES
+    ('1', 'images/house1/house1b.jpg'),
+    ('1', 'images/house1/house1a.jpg'),
+    ('2', 'images/house2/house2b.jpg'),
+    ('2', 'images/house2/house2a.jpg'),
+    ('3', 'images/house3/house3b.jpg'),
+    ('3', 'images/house3/house3a.jpg'),
+    ('4', 'images/house4/house4b.jpg'),
+    ('4', 'images/house4/house4a.jpg'),
+    ('5', 'images/house5/house5b.jpg'),
+    ('5', 'images/house5/house5a.jpg')");
 
 
-
+/***** add tenants-owners-staff view as 'users' for login *****/
+mysqli_query($db,
+	"CREATE VIEW users AS 
+			SELECT 'owner' as user_type, ownerID as id, username, `password` FROM owners
+		UNION
+			SELECT  'staff' as user_type, staffID as id, username, `password` FROM staff
+		UNION
+			SELECT  'tenant' as user_type, tenantID as id, username, `password` FROM tenants
+	;");
 
 function failed($at) {
 	global $db;

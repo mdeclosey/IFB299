@@ -77,17 +77,21 @@ if (count($_GET) == 0) {
 			  </thead>
 				<tbody>
 					<?php
-					$props = mysqli_query($db, "SELECT * FROM propertyImages");
-					while($results = mysqli_fetch_assoc($props)){
-						$imga[] = "<img src='images/house".$results['propertyID']."/house". $results['propertyID']."a.jpg' style='height:150px; width:49%;'>";
-						$imgb[] = "<img src='images/house".$results['propertyID']."/house". $results['propertyID']."b.jpg' style='height:150px; width:49%;'>";
-					}
-					$i = 0;
 					while ($property = mysqli_fetch_assoc($propertyList)) {
+						
+						$imageQuery = mysqli_query($db, "SELECT * FROM propertyImages WHERE propertyID = {$property['propertyID']}");
+						
 						echo "
 							<tr>
 							  <th scope='row'>{$property['propertyID']}</th>
-							  <td>$imga[$i] $imgb[$i]</td>
+							  <td>";
+						
+ 						// print each image						
+						while($results = mysqli_fetch_assoc($imageQuery)){
+							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 7em; margin-right: 1em'>";
+						}	  
+							  
+						echo "</td>
 							  <td>{$property['street']}, {$property['suburb']}, {$property['postcode']}</td>
 							  <td>{$property['staff_fname']} {$property['staff_lname']}</td>
 							  <td>{$property['fName']} {$property['lname']}</td>
@@ -101,7 +105,6 @@ if (count($_GET) == 0) {
 							  </td>
 							</tr>
 						";
-						$i++;
 					}	
 					?>
 				</tbody>

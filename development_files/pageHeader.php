@@ -54,12 +54,14 @@
 						[
 							'name' => 'Sign Up',
 							'url' => 'register.php',
-							'icon' => 'glyphicon glyphicon-user'
+							'icon' => 'glyphicon glyphicon-user',
+							'hideWhenAuthed' => true
 						],
 						[
 							'name' => 'Login',
 							'url' => 'login.php',
-							'icon' => 'glyphicon glyphicon-log-in'
+							'icon' => 'glyphicon glyphicon-log-in',
+							'hideWhenAuthed' => true
 						],
 						[
 							'name' => 'Contact',
@@ -84,13 +86,21 @@
 					/* Print the auth list navbar (this one has icons) */
 					echo '<ul class="nav navbar-nav navbar-right">';
 					foreach ($navBarQuickLinks as $nbItem) {
-						if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
-							echo '<li class="active">';
-						} else {
-							echo '<li>';
+						if (isset($nbItem['hideWhenAuthed']) && !isset($_SESSION['user_type'])) {
+							if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
+								echo '<li class="active">';
+							} else {
+								echo '<li>';
+							}
+							echo "<a href=\"{$nbItem['url']}\"><span class=\"{$nbItem['icon']}\"></span> {$nbItem['name']}</a></li>";
 						}
-						echo "<a href=\"{$nbItem['url']}\"><span class=\"{$nbItem['icon']}\"></span> {$nbItem['name']}</a></li>";
 					}
+					
+					/* Print the logout button */
+					if (isset($_SESSION['user_type'])) {
+						echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>';
+					}
+					
 					echo '</ul>';
 				?>
 		  </div>
