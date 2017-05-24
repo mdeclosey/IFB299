@@ -241,13 +241,15 @@ if (isset($_GET['view'])) {
 	if (isset($_GET['id']) && $_GET['id'] > 0) {
 		// get property
 		$propQuery = mysqli_query($db, "SELECT * FROM properties WHERE propertyID={$_GET['id']}");
-		
 		if (mysqli_num_rows($propQuery) == 1) {
 			$prop = mysqli_fetch_assoc($propQuery);
+			$staffassoc = mysqli_query($db, "SELECT * FROM staff WHERE staffID={$prop['staffID']}");
+			$propStaff = mysqli_fetch_assoc($staffassoc);
 			?>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}"; ?>
+					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}<br>INSERT PHOTOS HERE<br>INSERT VIEWING TIMES HERE<br>"; ?>
+					<?php echo "Agent: {$propStaff['fName']} {$propStaff['lname']} <br>Contact Email: {$propStaff['email']}<br>Phone Number: {$propStaff['phone']}"; ?>
 				</div>
 				<div class="panel-body">
 										
