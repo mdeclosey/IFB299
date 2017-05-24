@@ -264,8 +264,17 @@ if (isset($_GET['view'])) {
 			?>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<?php echo "{$prop['street']}, {$prop['suburb']}, {$prop['postcode']}<br>INSERT IMAGES <br>"; ?>
-					<?php  echo "Inspection Times: {$startdate} til {$enddate}<br>";?>
+				<?php echo "<span style= 'font-size: 3em; color: navy'>{$prop['street']}, {$prop['suburb']} {$prop['postcode']}</span><br>";?>
+					
+					<?php   
+						$imageQuery = mysqli_query($db, "SELECT * FROM propertyImages WHERE propertyID = {$prop['propertyID']}");
+ 						// print each image						
+						while($results = mysqli_fetch_assoc($imageQuery)){
+							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 20em; margin-right: 2em'>";
+						}
+					
+					?>
+					<?php  echo "<br>Inspection Times: {$startdate} TO {$enddate}<br><br><br>";?>
 					
 					<?php echo "Agent: {$propStaff['fName']} {$propStaff['lname']} <br>Contact Email: {$propStaff['email']}<br>Phone Number: {$propStaff['phone']}"; ?>
 				</div>
