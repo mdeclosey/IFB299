@@ -18,8 +18,8 @@ if (count($_GET) == 0) {
 			<table class="table">
 			  <thead>
 				<tr>
-				  <th>Staff Member</th>
-				  <th>Staff Email</th>
+				  <th>Agent</th>
+				  <th>Email</th>
 				  <th>Contact Number</th>
 				</tr>
 			  </thead>

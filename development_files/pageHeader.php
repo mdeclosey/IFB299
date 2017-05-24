@@ -48,6 +48,10 @@
 						[
 							'name' => 'Properties',
 							'url' => 'properties.php'
+						],
+						[
+							'name' => 'Contact Us',
+							'url' => 'contact.php'
 						]
 					];
 					
