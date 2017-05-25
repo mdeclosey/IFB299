@@ -6,7 +6,7 @@ if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
 		// if jquery caught the save click then it must have been validated already (but consider csrf)
-		$update = mysqli_query($db, "UPDATE staff SET fname='{$_POST['fname']}', lname='{$_POST['lname']}', phone='{$_POST['phone']}', email='{$_POST['email']}' WHERE staffID='{$_POST['id']}'");
+		$update = mysqli_query($db, "UPDATE staff SET username='{$_POST['username']}', password='{$_POST['password']}', fname='{$_POST['fname']}', lname='{$_POST['lname']}', phone='{$_POST['phone']}', email='{$_POST['email']}' WHERE staffID='{$_POST['id']}'");
 		
 		if ($update) {
 			header('location: staff.php'); // redirect to prevent resubmit
@@ -15,7 +15,7 @@ if (isset($_GET['save'])) {
 		}
 	} else {
 		// new staff
-		$update = mysqli_query($db, "INSERT INTO staff (fname, lname, phone, email) VALUES('{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
+		$update = mysqli_query($db, "INSERT INTO staff (username, password, fname, lname, phone, email) VALUES('{$_POST['username']}', '{$_POST['password']}', '{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
 		
 		if ($update) {
 			header('location: staff.php'); // redirect to prevent resubmit
@@ -63,6 +63,7 @@ if (count($_GET) == 0) {
 			  <thead>
 				<tr>
 				  <th>#</th>
+				  <th>Username</th>
 				  <th>First Name</th>
 				  <th>Last Name</th>
 				  <th>Email</th>
@@ -76,6 +77,7 @@ if (count($_GET) == 0) {
 						echo "
 							<tr>
 							  <th scope='row'>{$client['staffID']}</th>
+							  <td>{$client['username']}</td>
 							  <td>{$client['fName']}</td>
 							  <td>{$client['lname']}</td>
 							  <td>{$client['email']}</td>
@@ -113,6 +115,8 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
 		$staff = [
 			'id' => '',
+			'username' => '',
+			'password' => '',
 			'fName' => '',
 			'lname' => '',
 			'email' => '',
@@ -130,6 +134,18 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 				<?php echo "{$action} {$staff['fName']} {$staff['lname']}"; ?>
 			</div>
 			<div class="panel-body" style="padding: 2em">
+				<div class="form-group row">
+				  <label for="example-text-input" class="col-2 col-form-label">Username</label>
+				  <div class="col-10">
+					<input class="form-control" type="text" value="<?php echo "{$staff['username']}"; ?>" id="username" name="username">
+				  </div>
+				</div>
+				<div class="form-group row">
+				  <label for="example-text-input" class="col-2 col-form-label">Password</label>
+				  <div class="col-10">
+					<input class="form-control" type="password" value="<?php echo "{$staff['password']}"; ?>" id="Password" name="Password">
+				  </div>
+				</div>
 				<div class="form-group row">
 				  <label for="example-text-input" class="col-2 col-form-label">First Name</label>
 				  <div class="col-10">
