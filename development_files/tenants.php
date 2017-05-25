@@ -18,7 +18,11 @@ if (isset($_GET['save'])) {
 		$update = mysqli_query($db, "INSERT INTO tenants (username, password, fname, lname, phone, email) VALUES('{$_POST['username']}', '{$_POST['password']}', '{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['phone']}', '{$_POST['email']}')");
 		
 		if ($update) {
-			header('location: tenants.php'); // redirect to prevent resubmit
+			if (isset($_POST['reference']) && $_POST['reference'] == 'register') {
+				header('location: login.php');
+			} else {
+				header('location: tenants.php'); // redirect to prevent resubmit
+			}
 		} else {
 			echo mysqli_error($db); exit;
 		}

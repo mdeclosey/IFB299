@@ -24,51 +24,88 @@
 ?>
 
 <?php include('pageHeader.php'); ?>
-
-	<form id="frmReg" action="register.php?register" method="post">
-		<div id="loginForm">
-			<table class="form-group table">
-			  	<tr>
-			    	<td colspan="0"><input type="text" id="FirstName" name="FirstName" placeholder="First Name" autocomplete="off" class="form-control"></td>
-				</tr>
-				<tr>
-			    	<td colspan="0"><input type="text" id="LastName" name="LastName" placeholder="Last Name" autocomplete="off" class="form-control"></td>
-				</tr>
-				<tr>
-			    	<td colspan="0"><input type="text" id="Phone" name="Phone" placeholder="Phone Number" autocomplete="off" class="form-control"></td>
-				</tr>
-				<tr>
-			    	<td colspan="0"><input type="text" id="email" name="email" placeholder="Email" autocomplete="off" class="form-control"></td>
-				</tr>
-			  	<tr>
-			    	<td colspan="0"><input type="password" name="pw" placeholder="Password" id="pw" class="form-control"></td>
-			  	</tr>
-			  	<tr>
-			    	<td><input type="button" id="log" value="Register" class="btn btn-success"></td>
-			  	</tr>
-			</table> 			
+<form action="tenants.php?save" method="post" id="frmEditTenant">
+	<input type="hidden" name="reference" value="register">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			Register as a Tenant
 		</div>
-	</form>
+		<div class="panel-body" style="padding: 2em">
+			<div class="form-group row">
+			  <label for="example-text-input" class="col-2 col-form-label">Username</label>
+			  <div class="col-10">
+				<input class="form-control" type="text"id="username" name="username">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <label for="example-text-input" class="col-2 col-form-label">Password</label>
+			  <div class="col-10">
+				<input class="form-control" type="password" id="Password" name="Password">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <label for="example-text-input" class="col-2 col-form-label">First Name</label>
+			  <div class="col-10">
+				<input class="form-control" type="text" id="fname" name="fname">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <label for="example-search-input" class="col-2 col-form-label">Last Name</label>
+			  <div class="col-10">
+				<input class="form-control" type="text" id="lname" name="lname">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <label for="example-email-input" class="col-2 col-form-label">Email</label>
+			  <div class="col-10">
+				<input class="form-control" type="email" id="email" name="email">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <label for="example-url-input" class="col-2 col-form-label">Phone</label>
+			  <div class="col-10">
+				<input class="form-control" type="text" id="phone" name="phone">
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <div class="col-10">
+				<button type="button" id="save" class='btn btn-success'>
+				  <span class='glyphicon glyphicon-ok-circle'></span> Save
+				</button>
+				<button type="button" id="cancel" class='btn btn-secondary'>
+				  <span class='glyphicon glyphicon-remove-circle'></span> Cancel
+				</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+</form>
 	
 	<script>
-	$(document).ready(function () {
-		$('#log').click(function() {
-			var fname = $('#FirstName');
-			var lname = $('#LastName');
-			var phone = $('#Phone');
-			var email = $('#email');
-			var pword = $('#pw');
+		$(document).ready(function() {
+			// Cancel button pressed
+			$('#cancel').click(function() {
+				window.location.href = "tenants.php";
+			});
 			
-			if (fname.val() == '' ||
-				lname.val() == '' ||
-				phone.val() == '' ||
-				email.val() == '' ||
-				pword.val() == '') {
-					alert('Ensure all fields are filled out');
-			} else {
-				$('#frmReg').submit();
-			}
-		});		
-	});
+			// Save button pressed
+			$('#save').click(function() {
+				var fname = $("#fname");
+				var lname = $("#lname");
+				var phone = $("#phone");
+				var email = $("#email");
+				
+				// validate form
+				if (fname.val() == '' ||
+					lname.val() == '' ||
+					phone.val() == '' ||
+					email.val() == '') 
+				{
+					alert('Ensure you have filled out the entire form.');
+				} else {
+					$("#frmEditTenant").submit();
+				}
+			});
+		});
 	</script>
 <?php include('pageFooter.php'); ?>
