@@ -49,21 +49,40 @@ if (isset($_GET['delete'])) {
 
 // List contracts
 if (count($_GET) == 0) { // this line checks we are only listing contracts, nothing else
-	$contractList = mysqli_query($db, "
-		SELECT 
-		contracts.contractID, 
-		properties.street, 
-		properties.suburb, 
-		properties.postcode, 
-		contracts.startDate, 
-		contracts.endDate,
-		tenants.fName,
-		tenants.lname
-		FROM contracts
-		LEFT JOIN tenants ON tenants.tenantID=contracts.tenantID
-		LEFT JOIN properties ON properties.propertyID=contracts.propertyID
-		ORDER BY contracts.contractID ASC
-	") or die(mysqli_error($db));
+	if ($_SESSION['user_type'] == 'david') { // list all property contracts because david is logged in
+		$contractList = mysqli_query($db, "
+			SELECT 
+			contracts.contractID, 
+			properties.street, 
+			properties.suburb, 
+			properties.postcode, 
+			contracts.startDate, 
+			contracts.endDate,
+			tenants.fName,
+			tenants.lname
+			FROM contracts
+			LEFT JOIN tenants ON tenants.tenantID=contracts.tenantID
+			LEFT JOIN properties ON properties.propertyID=contracts.propertyID
+			ORDER BY contracts.contractID ASC
+		") or die(mysqli_error($db));
+	} else { // only list property contracts for the current users' properties
+		$contractList = mysqli_query($db, "
+			SELECT 
+			contracts.contractID, 
+			properties.street, 
+			properties.suburb, 
+			properties.postcode, 
+			contracts.startDate, 
+			contracts.endDate,
+			tenants.fName,
+			tenants.lname
+			FROM contracts
+			LEFT JOIN tenants ON tenants.tenantID=contracts.tenantID
+			LEFT JOIN properties ON properties.propertyID=contracts.propertyID
+			WHERE properties.staffID = {$_SESSION['user_id']}
+			ORDER BY contracts.contractID ASC
+		") or die(mysqli_error($db));
+	}
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">

@@ -31,23 +31,41 @@
 						],
 						[
 							'name' => 'Tenants',
-							'url' => 'tenants.php'
+							'url' => 'tenants.php',
+							'user_type' => [
+								'david',
+								'staff'
+							]
 						],
 						[
 							'name' => 'Staff',
-							'url' => 'staff.php'
+							'url' => 'staff.php',
+							'user_type' => [
+								'david'
+							]
 						],
 						[
 							'name' => 'Owners',
-							'url' => 'owners.php'
+							'url' => 'owners.php',
+							'user_type' => [
+								'david'
+							]
 						],
 						[
 							'name' => 'Contracts',
-							'url' => 'contracts.php'
+							'url' => 'contracts.php',
+							'user_type' => [
+								'david',
+								'staff'
+							]
 						],
 						[
 							'name' => 'Properties',
-							'url' => 'properties.php'
+							'url' => 'properties.php',
+							'user_type' => [
+								'david',
+								'staff'
+							]
 						],
 						[
 							'name' => 'Contact Us',
@@ -79,12 +97,14 @@
 					/* Print the features list navbar */
 					echo '<ul class="nav navbar-nav">';
 					foreach ($navBarItems as $nbItem) {
-						if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
-							echo '<li class="active">';
-						} else {
-							echo '<li>';
+						if (isset($nbItem['user_type']) && isset($_SESSION['user_type']) && in_array($_SESSION['user_type'], $nbItem['user_type']) || !isset($nbItem['user_type'])) {
+							if ($_SERVER['SCRIPT_NAME'] == "/{$nbItem['url']}") {
+								echo '<li class="active">';
+							} else {
+								echo '<li>';
+							}
+							echo "<a href=\"{$nbItem['url']}\">{$nbItem['name']}</a></li>";
 						}
-						echo "<a href=\"{$nbItem['url']}\">{$nbItem['name']}</a></li>";
 					}
 					echo '</ul>';
 					

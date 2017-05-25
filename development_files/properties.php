@@ -48,11 +48,22 @@ if (isset($_GET['delete'])) {
 
 // List propertys
 if (count($_GET) == 0) {
-	$propertyList = mysqli_query($db, "
-		SELECT *, staff.fName as staff_fname, staff.lname as staff_lname FROM properties 
-		LEFT JOIN staff ON properties.staffID = staff.staffID
-		LEFT JOIN owners ON properties.ownerID = owners.ownerID
-		") or die(mysqli_error($db));
+	if ($_SESSION['user_type'] == 'david') {
+		// Allow David to see all properties
+		$propertyList = mysqli_query($db, "
+			SELECT *, staff.fName as staff_fname, staff.lname as staff_lname FROM properties 
+			LEFT JOIN staff ON properties.staffID = staff.staffID
+			LEFT JOIN owners ON properties.ownerID = owners.ownerID
+			") or die(mysqli_error($db));
+	} else {
+		// Only list the properties assigned to the current staff member
+		$propertyList = mysqli_query($db, "
+			SELECT *, staff.fName as staff_fname, staff.lname as staff_lname FROM properties 
+			LEFT JOIN staff ON properties.staffID = staff.staffID
+			LEFT JOIN owners ON properties.ownerID = owners.ownerID
+			WHERE staff.staffID = {$_SESSION['user_id']}
+			") or die(mysqli_error($db));
+	}
 	?>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
@@ -166,24 +177,32 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 						<input class="form-control" type="email" value="<?php echo "{$property['postcode']}"; ?>" id="postcode" name="postcode">
 					</div>
 				</div>
-				<div class="form-group row">
-				  <label for="example-text-input" class="col-2 col-form-label">Staff</label>
-				  <div class="col-10">
-					<select name="staffID" id="staffID" class="form-control">
-						<option disabled>Select staff</option>
-						<?php
-						while ($staf = mysqli_fetch_assoc($staff)) {
-							if ($property['staffID'] == $staf['staffID']) {
-								echo "<option selected value='{$staf["staffID"]}'>";
-							} else {
-								echo "<option value='{$staf["staffID"]}'>";
+				<?php
+				if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'david') { 
+				?>
+					<div class="form-group row">
+					  <label for="example-text-input" class="col-2 col-form-label">Staff</label>
+					  <div class="col-10">
+						<select name="staffID" id="staffID" class="form-control">
+							<option disabled>Select staff</option>
+							<?php
+							while ($staf = mysqli_fetch_assoc($staff)) {
+								if ($property['staffID'] == $staf['staffID']) {
+									echo "<option selected value='{$staf["staffID"]}'>";
+								} else {
+									echo "<option value='{$staf["staffID"]}'>";
+								}
+								echo "{$staf["fName"]} {$staf["lname"]}</option>";
 							}
-							echo "{$staf["fName"]} {$staf["lname"]}</option>";
-						}
-						?>
-					</select>
-				  </div>
-				</div>
+							?>
+						</select>
+					  </div>
+					</div>
+				<?php
+				} else {
+					echo "<input type=\"hidden\" name=\"staffID\" value=\"{$property['staffID']}\">";
+				}
+				?>
 				<div class="form-group row">
 					<label for="example-search-input" class="col-2 col-form-label">Owner</label>
 					<div class="col-10">
@@ -257,29 +276,41 @@ if (isset($_GET['view'])) {
 			$prop = mysqli_fetch_assoc($propQuery);
 			$staffassoc = mysqli_query($db, "SELECT * FROM staff WHERE staffID={$prop['staffID']}");
 			$propStaff = mysqli_fetch_assoc($staffassoc);
-			$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']}");
-			$propTimes = mysqli_fetch_assoc($timesassoc);
-			$startdate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['start_datetime']));
-			$enddate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['end_dateTime']));
+			
 			?>
 			<div class="panel panel-primary">
-				<div class="panel-heading">
-				<?php echo "<span style= 'font-size: 3em; color: navy'>{$prop['street']}, {$prop['suburb']} {$prop['postcode']}</span><br>";?>
-					
+					<?php echo "<span style=\"font-family: 'Quicksand', sans-serif; font-size: 3em; margin-left: 0.75em; padding-left: 0.2em; border-left: 3px solid navy; color: navy; display: block; margin-top: 0.5em\">{$prop['street']}, {$prop['suburb']} {$prop['postcode']}</span><br>";?>
+				<div class="panel-body">
 					<?php   
+				/* PROPERTY IMAGES */
 						$imageQuery = mysqli_query($db, "SELECT * FROM propertyImages WHERE propertyID = {$prop['propertyID']}");
  						// print each image						
 						while($results = mysqli_fetch_assoc($imageQuery)){
-							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 20em; margin-right: 2em'>";
+							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 15em; margin-right: 2em'  class=\"img-thumbnail\">";
 						}
-					
+					?><br><br><?php	
+				/* PROPERTY INSPECTION TIMES */		
+					$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']}");
+					if (mysqli_num_rows($timesassoc) > 0) {
 					?>
-					<?php  echo "<br>Inspection Times: {$startdate} TO {$enddate}<br><br><br>";?>
+				<div class="alert alert-success" role="alert">
+					<h4 class="alert-heading">Inspection Times</h4>
+					<?php 
+						
+						while ($propTimes = mysqli_fetch_assoc($timesassoc)) {
+							$startdate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['start_datetime']));
+							$enddate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['end_dateTime']));
+							echo "{$startdate} TO {$enddate}<br>";
+						}
+					?>
+				</div>	
+					<?php }
 					
-					<?php echo "Agent: {$propStaff['fName']} {$propStaff['lname']} <br>Contact Email: {$propStaff['email']}<br>Phone Number: {$propStaff['phone']}"; ?>
-				</div>
-				<div class="panel-body">
-										
+				/* PROPERTY DETAILS */
+				?>
+				<div class="alert alert-info" role="alert">
+					<h4 class="alert-heading">Details</h4>
+					<?php echo "<strong>Reference</strong> {$prop['propertyID']}<br><strong>Agent</strong> {$propStaff['fName']} {$propStaff['lname']} <br><strong>Contact Email</strong> {$propStaff['email']}<br><strong>Phone Number</strong> {$propStaff['phone']}"; ?>
 				</div>
 			</div>
 		<?php
