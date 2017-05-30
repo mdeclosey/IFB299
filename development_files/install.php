@@ -204,6 +204,23 @@ mysqli_query($db,
     ('5', 'images/house5/house5b.jpg'),
     ('5', 'images/house5/house5a.jpg')");
 
+/***** add property view tenants table *****/
+mysqli_query($db,
+    "CREATE TABLE IF NOT EXISTS property_view_tenants(
+      property_id INT NOT NULL,
+      tenant_id INT NOT NULL,
+      PRIMARY KEY (property_id)
+      );"
+) or die(failed("createPropertyViewTenantsTable"));
+
+mysqli_query($db,
+    "INSERT INTO property_view_tenants(property_id, tenant_id) VALUES
+    (1, 4),
+    (2, 1),
+    (3, 2),
+    (4, 3),
+    (5, 5);"
+)or die(failed("createPropertyViewTenants"));
 
 /***** add tenants-owners-staff view as 'users' for login *****/
 mysqli_query($db,
