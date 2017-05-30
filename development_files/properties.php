@@ -16,7 +16,7 @@ if (isset($_GET['save'])) {
 		}
 	} else {
 		// new property
-		$update = mysqli_query($db, "INSERT INTO properties (staffID, ownerID, street, suburb, postcode) VALUES('{$_POST['staffID']}', '{$_POST['ownerID']}', '{$_POST['street']}', '{$_POST['suburb']}', '{$_POST['postcode']}')");
+		$update = mysqli_query($db, "INSERT INTO properties (beds, baths, cars, amount_week, staffID, ownerID, street, suburb, postcode) VALUES('{$_POST['beds']}', '{$_POST['baths']}', '{$_POST['cars']}', '{$_POST['amount_week']}', '{$_POST['staffID']}', '{$_POST['ownerID']}', '{$_POST['street']}', '{$_POST['suburb']}', '{$_POST['postcode']}')");
 		
 		if ($update) {
 			header('location: properties.php'); // redirect to prevent resubmit
