@@ -3,14 +3,13 @@
 <?php
 /***** New/Edit viewing *****/
 if (isset($_GET['save'])) {
-$staffID = intval(mysqli_query($db, "SELECT staffID FROM Properties WHERE street='{$_POST['propertyID']}'"));
-    if (isset($_POST['propertyID']) && $_POST['propertyID'] > 0) {
+
+    if (isset($_POST['id']) && $_POST['id'] > 0) {
         // if jquery caught the save click then it must have been validated already (but consider csrf)
 	
         print_r($_POST);
 	
-
-        $update = mysqli_query($db, "UPDATE PropertyViews SET propertyID={$_POST['propertyID']}, start_datetime='{$_POST['start_datetime']}', end_dateTime='{$_POST['end_dateTime']}', staffID=$staffID WHERE id='{$_POST['id']}'");
+        $update = mysqli_query($db, "UPDATE PropertyViews SET propertyID={$_POST['propertyID']}, start_datetime='{$_POST['start_datetime']}', end_dateTime='{$_POST['end_dateTime']}' WHERE id='{$_POST['id']}'");
 
         if ($update) {
             header('location: propertyViews.php'); // redirect to prevent resubmit
@@ -19,7 +18,7 @@ $staffID = intval(mysqli_query($db, "SELECT staffID FROM Properties WHERE street
         }
     } else {
         // new viewing
-        $update = mysqli_query($db, "INSERT INTO PropertyViews (propertyID, start_datetime, end_dateTime, staffID) VALUES('{$_POST['propertyID']}', '{$_POST['start_datetime']}', '{$_POST['end_datetime']}','$staffID')");
+	$update = mysqli_query($db, "INSERT INTO PropertyViews (propertyID, start_datetime, end_dateTime, staffID) VALUES('{$_POST['propertyID']}', '{$_POST['start_datetime']}', '{$_POST['end_dateTime']}','{$_POST['propertyID']}')");
 
         if ($update) {
             header('location: propertyViews.php'); // redirect to prevent resubmit
@@ -53,19 +52,19 @@ if (isset($_GET['delete'])) {
 if (count($_GET) == 0) {
     $viewsList = mysqli_query($db, "
 		SELECT
-		Properties.street, 
-		Properties.suburb, 
-		Properties.postcode,
-		Staff.fname,
-		Staff.lname, 
+		properties.street, 
+		properties.suburb, 
+		properties.postcode,
+		staff.fname,
+		staff.lname, 
 		PropertyViews.id,
 		PropertyViews.propertyID,
 		PropertyViews.start_datetime,
 		PropertyViews.end_datetime,
 		PropertyViews.staffID
 		FROM PropertyViews
-		LEFT JOIN Properties ON PropertyViews.propertyID=Properties.propertyID
-		LEFT JOIN Staff ON PropertyViews.staffID=Staff.staffID
+		LEFT JOIN properties ON PropertyViews.propertyID=properties.propertyID
+		LEFT JOIN staff ON PropertyViews.staffID=staff.staffID
 		ORDER BY PropertyViews.start_datetime ASC
 	") or die(mysqli_error($db));
     ?>
@@ -141,8 +140,8 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	}
 	
 
-	$properties = mysqli_query($db, "SELECT * FROM Properties");
-	$staff = mysqli_query($db, "SELECT * FROM Staff");
+	$properties = mysqli_query($db, "SELECT * FROM properties");
+	$staff = mysqli_query($db, "SELECT * FROM staff");
 ?>
 	<form action="propertyViews.php?save" method="post" id="frmEditView">
 		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
@@ -208,7 +207,7 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 			// Save button pressed
 			$('#save').click(function() {
 				var property = $("#propertyID");
-				var startDate = $("#start_datetime");
+				var startDate = $("#start_dateTime");
 				var endDate = $("#end_dateTime");
 				
 				// validate form
