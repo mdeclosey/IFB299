@@ -68,6 +68,23 @@
 							]
 						],
 						[
+							'name' => 'Viewing Times',
+							'url' => 'propertyViews.php',
+							'user_type' => [
+								'david',
+								'staff'
+							]
+						],
+						[
+							'name' => 'Inspection',
+							'url' => 'inspection.php',
+							'user_type' => [
+								'david',
+								'staff',
+								'tenant'
+							]
+						],
+						[
 							'name' => 'Contact Us',
 							'url' => 'contact.php'
 						]
