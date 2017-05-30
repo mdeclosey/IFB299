@@ -50,6 +50,12 @@ if (isset($_GET['delete'])) {
 <?php
 // List properties
 if (count($_GET) == 0) {
+	$where = "";
+	
+	if ($_SESSION['user_type'] != 'david') {
+		$where = "WHERE properties.staffID=".$_SESSION['user_id'];
+	}
+	
     $viewsList = mysqli_query($db, "
 		SELECT
 		PropertyViews.id as PropertyViews_id,
@@ -66,6 +72,7 @@ if (count($_GET) == 0) {
 		FROM PropertyViews
 		LEFT JOIN properties ON PropertyViews.propertyID=properties.propertyID
 		LEFT JOIN staff ON PropertyViews.staffID=staff.staffID
+		".$where."
 		ORDER BY PropertyViews.start_datetime ASC
 	") or die(mysqli_error($db));
     ?>
