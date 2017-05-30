@@ -146,7 +146,7 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 				<div class="form-group row">
 				  <label for="example-text-input" class="col-2 col-form-label">Password</label>
 				  <div class="col-10">
-					<input class="form-control" type="password" value="<?php echo "{$tenant['password']}"; ?>" id="Password" name="Password">
+					<input class="form-control" type="password" value="<?php echo "{$tenant['password']}"; ?>" id="password" name="password">
 				  </div>
 				</div>
 				<div class="form-group row">
