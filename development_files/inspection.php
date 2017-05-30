@@ -188,7 +188,11 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	}
 	
 	$tenants = mysqli_query($db, "SELECT * FROM tenants");
-	$properties = mysqli_query($db, "SELECT *, propertyviews.id as propertyviews_id FROM properties RIGHT JOIN propertyviews ON properties.propertyID=propertyviews.propertyID ORDER BY PropertyViews.start_datetime ASC");
+	if ($_SESSION['user_type'] == 'david') {
+		$properties = mysqli_query($db, "SELECT *, propertyviews.id as propertyviews_id FROM properties RIGHT JOIN propertyviews ON properties.propertyID=propertyviews.propertyID ORDER BY PropertyViews.start_datetime ASC");
+	} else {
+		$properties = mysqli_query($db, "SELECT *, propertyviews.id as propertyviews_id FROM properties RIGHT JOIN propertyviews ON properties.propertyID=propertyviews.propertyID WHERE properties.staffID = '". $_SESSION['user_id'] ."' ORDER BY PropertyViews.start_datetime ASC");
+	}
 ?>
 	<form action="inspection.php?save" method="post" id="frmEditContract">
 		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>

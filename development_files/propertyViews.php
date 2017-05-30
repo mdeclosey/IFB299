@@ -141,7 +141,11 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	}
 	
 
-	$properties = mysqli_query($db, "SELECT * FROM properties");
+	if ($_SESSION['user_type'] == 'david') {
+		$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID");
+	} else {
+		$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID WHERE properties.staffID='" . $_SESSION['user_id'] . "'");
+	}
 	$staff = mysqli_query($db, "SELECT * FROM staff");
 ?>
 	<form action="propertyViews.php?save" method="post" id="frmEditView">
