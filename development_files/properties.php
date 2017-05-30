@@ -298,7 +298,11 @@ if (isset($_GET['view'])) {
 					
 					<br><br><?php	
 				/* PROPERTY INSPECTION TIMES */		
-					$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']} ORDER BY start_datetime ASC");
+					if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == 'tenant') {
+						$timesassoc = mysqli_query($db, "SELECT *, PropertyViews.id as pv_id FROM PropertyViews LEFT JOIN property_view_tenants ON property_view_tenants.property_inspection_id = propertyviews.id AND tenant_id='".$_SESSION['user_id']."' WHERE propertyID={$_GET['id']} ORDER BY start_datetime ASC");
+					} else {
+						$timesassoc = mysqli_query($db, "SELECT *, PropertyViews.id as pv_id FROM PropertyViews LEFT JOIN property_view_tenants ON property_view_tenants.property_inspection_id = propertyviews.id WHERE propertyID={$_GET['id']} ORDER BY start_datetime ASC");
+					}
 					if (mysqli_num_rows($timesassoc) > 0) {
 					?>
 				<div class="alert alert-success" role="alert">
@@ -308,7 +312,17 @@ if (isset($_GET['view'])) {
 						while ($propTimes = mysqli_fetch_assoc($timesassoc)) {
 							$startdate   =  date('l jS F Y g:ia ', strtotime($propTimes['start_datetime']));
 							$enddate   =  date('g:ia', strtotime($propTimes['end_dateTime']));
-							echo "{$startdate} - {$enddate}<br>";
+							echo "{$startdate} - {$enddate}";
+							
+							if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'tenant') {
+								if ($propTimes['tenant_id'] == null) {
+									echo '<a href="inspection.php?register='.$propTimes['pv_id'].'&property='.$_GET['id'].'" class="btn btn-warning btn-sm" style="margin-left: 3em">Register for Inspection</a>';
+								} else {
+									echo '<a href="#" class="btn btn-warning btn-sm disabled" style="margin-left: 3em">Registered</a>';
+								}
+							}
+							
+							echo '<br>';
 						}
 					?>
 				</div>	

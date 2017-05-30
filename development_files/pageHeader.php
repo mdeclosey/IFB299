@@ -80,8 +80,7 @@
 							'url' => 'inspection.php',
 							'user_type' => [
 								'david',
-								'staff',
-								'tenant'
+								'staff'
 							]
 						],
 						[
@@ -140,8 +139,13 @@
 					
 					/* Print the logout button */
 					if (isset($_SESSION['user_type'])) {
-						$loggedInUser = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM users WHERE user_type='".$_SESSION['user_type']."' AND id='".$_SESSION['user_id']."'"));
-						print_r($loggedInUser);
+						if ($_SESSION['user_type'] != 'david') {
+							$query = mysqli_query($db, "SELECT * FROM users WHERE user_type='".$_SESSION['user_type']."' AND id='".$_SESSION['user_id']."'") or die(mysqli_error($db));
+							$loggedInUser = mysqli_fetch_assoc($query);
+						} else {
+							$loggedInUser = ['fName' => 'David', 'lname' => ''];
+						}
+
 						echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout ' . $loggedInUser['fName'] . ' ' . $loggedInUser['lname'] . '</a></li>';
 					}
 					

@@ -41,6 +41,18 @@ if (isset($_GET['delete'])) {
 		header('location: inspection.php');
 	}
 }
+
+/***** Quick register for inspection ******/
+if (isset($_GET['register'])) {
+	$update = mysqli_query($db, "INSERT INTO property_view_tenants (property_inspection_id, tenant_id) VALUES('{$_GET['register']}', '{$_SESSION['user_id']}')");
+		
+	// if the update was successful
+	if ($update) {
+		header('location: properties.php?view&id='.$_GET['property']); // redirect to prevent resubmit
+	} else {
+		echo mysqli_error($db); exit;
+	}
+}
 ?>
 
 <?php include('pageHeader.php'); ?>

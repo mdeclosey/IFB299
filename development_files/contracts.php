@@ -6,7 +6,7 @@ if (isset($_GET['save'])) {
 	if (isset($_POST['id']) && $_POST['id'] > 0) {
 		// should perform server side form validation but meh,
 		// if jquery caught the save click then it must have been validated already (but consider csrf)
-		$update = mysqli_query($db, "UPDATE contracts SET propertyID='{$_POST['propertyID']}', tenantID='{$_POST['tenantID']}', startDate='{$_POST['startDate']}', endDate='{$_POST['endDate']}' WHERE contractID='{$_POST['id']}'");
+		$update = mysqli_query($db, "UPDATE contracts SET propertyID='{$_POST['propertyID']}', tenantID='{$_POST['tenantID']}', startDate='{$_POST['startDate']}', endDate='{$_POST['endDate']}' WHERE contractID='{$_POST['id']}'") or die(mysqli_error($db));
 		
 		// if the update was successful
 		if ($update) {
@@ -16,7 +16,7 @@ if (isset($_GET['save'])) {
 		}
 	} else {
 		// new contract
-		$update = mysqli_query($db, "INSERT INTO contracts (propertyID, tenantID, startDate, endDate) VALUES('{$_POST['propertyID']}', '{$_POST['tenantID']}', '{$_POST['startDate']}', '{$_POST['endDate']}')");
+		$update = mysqli_query($db, "INSERT INTO contracts (propertyID, tenantID, startDate, endDate) VALUES('{$_POST['propertyID']}', '{$_POST['tenantID']}', '{$_POST['startDate']}', '{$_POST['endDate']}')") or die(mysqli_error($db));
 		
 		// if the update was successful
 		if ($update) {
@@ -160,7 +160,11 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 	}
 	
 	$tenants = mysqli_query($db, "SELECT * FROM tenants");
-	$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID");
+	if ($_SESSION['user_type'] == 'david') {
+		$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID");
+	} else {
+		$properties = mysqli_query($db, "SELECT * FROM properties LEFT JOIN staff ON staff.staffID=properties.staffID WHERE properties.staffID='" . $_SESSION['user_id'] . "'");
+	}
 ?>
 	<form action="contracts.php?save" method="post" id="frmEditContract">
 		<?php if (isset($_GET['edit'])) { ?> <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">  <?php }; ?>
