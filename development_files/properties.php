@@ -7,7 +7,7 @@ if (isset($_GET['save'])) {
 		// should perform server side form validation but meh,
 		// if jquery caught the save click then it must have been validated already (but consider csrf)
 		print_r($_POST);
-		$update = mysqli_query($db, "UPDATE properties SET staffID='{$_POST['staffID']}', ownerID='{$_POST['ownerID']}', street='{$_POST['street']}', suburb='{$_POST['suburb']}', postcode='{$_POST['postcode']}' WHERE propertyID='{$_POST['id']}'");
+		$update = mysqli_query($db, "UPDATE properties SET staffID='{$_POST['staffID']}', ownerID='{$_POST['ownerID']}', beds='{$_POST['beds']}', baths='{$_POST['baths']}', cars='{$_POST['cars']}', amount_week='{$_POST['amount_week']}', street='{$_POST['street']}', suburb='{$_POST['suburb']}', postcode='{$_POST['postcode']}' WHERE propertyID='{$_POST['id']}'");
 		
 		if ($update) {
 			header('location: properties.php'); // redirect to prevent resubmit
@@ -80,6 +80,8 @@ if (count($_GET) == 0) {
 				<tr>
 				  <th>#</th>
 				  <th>Images</th>
+				  <th>Layout</th>
+				  <th>Weekly Rent</th>
 				  <th>Property</th>
 				  <th>Staff</th>
 				  <th>Owner</th>
@@ -101,8 +103,10 @@ if (count($_GET) == 0) {
 						while($results = mysqli_fetch_assoc($imageQuery)){
 							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 7em; margin-right: 1em'>";
 						}	  
-							  
+						$carParkWord = ($property['cars'] > 1) ? 'Parks' : 'Park';	  
 						echo "</td>
+							  <td>{$property['beds']} Bedrooms<br>{$property['baths']} Bathrooms<br>{$property['cars']} Car $carParkWord</td>
+							  <td>\${$property['amount_week']}</td>
 							  <td>{$property['street']}, {$property['suburb']}, {$property['postcode']}</td>
 							  <td>{$property['staff_fname']} {$property['staff_lname']}</td>
 							  <td>{$property['fName']} {$property['lname']}</td>
@@ -139,6 +143,10 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
 		$property = [
 			'propertyID' => '',
+			'beds' => '',
+			'baths' => '',
+			'cars' => '',
+			'amount_week' => '',
 			'street' => '',
 			'suburb' => '',
 			'postcode' => '',
@@ -175,6 +183,30 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 					<label for="example-email-input" class="col-2 col-form-label">Postcode</label>
 					<div class="col-10">
 						<input class="form-control" type="email" value="<?php echo "{$property['postcode']}"; ?>" id="postcode" name="postcode">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="example-text-input" class="col-2 col-form-label"># Bedrooms</label>
+					<div class="col-10">
+						<input class="form-control" type="text" value="<?php echo "{$property['beds']}"; ?>" id="beds" name="beds">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="example-text-input" class="col-2 col-form-label"># Bathrooms</label>
+					<div class="col-10">
+						<input class="form-control" type="text" value="<?php echo "{$property['baths']}"; ?>" id="baths" name="baths">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="example-text-input" class="col-2 col-form-label"># Car Parks</label>
+					<div class="col-10">
+						<input class="form-control" type="text" value="<?php echo "{$property['cars']}"; ?>" id="cars" name="cars">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="example-text-input" class="col-2 col-form-label">Weekly Rent</label>
+					<div class="col-10">
+						<input class="form-control" type="text" value="<?php echo "{$property['amount_week']}"; ?>" id="amount_week" name="amount_week">
 					</div>
 				</div>
 				<?php
@@ -245,6 +277,10 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 			// Save button pressed
 			$('#save').click(function() {
 				var owner = $("#ownerID");
+				var cars = $("#cars");
+				var baths = $("#baths");
+				var beds = $("#beds");
+				var amount_week = $("#amount_week");
 				var staff = $("#staffID");
 				var street = $("#street");
 				var suburb = $("#suburb");
@@ -253,6 +289,10 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 				// validate form
 				if (owner.val() <= 0 ||
 					staff.val() <= 0 ||
+					cars.val() == '' ||
+					baths.val() == '' ||
+					beds.val() == '' ||
+					amount_week.val() == '' ||
 					street.val() == '' ||
 					suburb.val() == '' ||
 					postcode.val() == '') 
@@ -281,7 +321,11 @@ if (isset($_GET['view'])) {
 			<div class="panel panel-primary">
 					<?php echo "<span style=\"font-family: 'Quicksand', sans-serif; font-size: 3em; margin-left: 0.75em; padding-left: 0.2em; border-left: 3px solid navy; color: navy; display: block; margin-top: 0.5em\">{$prop['street']}, {$prop['suburb']} {$prop['postcode']}</span><br>";?>
 				<div class="panel-body">
-					<?php   
+				<?php 
+				/* PROPERTY LAYOUT */
+				$carParkWord = ($prop['cars'] > 1) ? 'Parks' : 'Park';	
+				echo "<button type=\"button\" class=\"btn btn-primary btn-sm \">{$prop['beds']} Bedrooms</button> <button type=\"button\" class=\"btn btn-primary btn-sm \">{$prop['baths']} Bathrooms</button> <button type=\"button\" class=\"btn btn-primary btn-sm \">{$prop['cars']} Car $carParkWord</button> <button type=\"button\" class=\"btn btn-success btn-sm \">\${$prop['amount_week']} / week</button><br><br>";
+
 				/* PROPERTY IMAGES */
 						$imageQuery = mysqli_query($db, "SELECT * FROM propertyImages WHERE propertyID = {$prop['propertyID']}");
  						// print each image						

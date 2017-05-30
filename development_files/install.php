@@ -115,6 +115,10 @@ mysqli_query($db,
 	propertyID INT AUTO_INCREMENT,
 	ownerID INT NOT NULL,
 	staffID INT NOT NULL,
+	beds INT NOT NULL,
+	baths INT NOT NULL,
+	cars INT NOT NULL,
+	amount_week INT NOT NULL,
 	street VARCHAR(60) NOT NULL,
 	suburb VARCHAR(60) NOT NULL,
 	postcode VARCHAR(60) NOT NULL,
@@ -124,12 +128,12 @@ mysqli_query($db,
 
 /***** add properties *****/
 mysqli_query($db, "
-	INSERT INTO properties (ownerID, staffID, street, suburb, postcode) VALUES 
-		('1', '1', '10 Adelaide Street', 'Brisbane', '4000'),
-		('2', '2', '20 Adelaide Street', 'Brisbane', '4000'),
-		('3', '3', '30 Adelaide Street', 'Brisbane', '4000'),
-		('4', '4', '40 Adelaide Street', 'Brisbane', '4000'),
-		('5', '5', '50 Adelaide Street', 'Brisbane', '4000');") or die(failed('createProperties'));
+	INSERT INTO properties (ownerID, staffID, beds, baths, cars, amount_week, street, suburb, postcode) VALUES 
+		('1', '1', 2, 2, 1, 280, '10 Adelaide Street', 'Brisbane', '4000'),
+		('2', '2', 3, 2, 2, 430, '20 Adelaide Street', 'Brisbane', '4000'),
+		('3', '3', 4, 3, 2, 550, '30 Adelaide Street', 'Brisbane', '4000'),
+		('4', '4', 2, 1, 1, 330, '40 Adelaide Street', 'Brisbane', '4000'),
+		('5', '5', 3, 2, 1, 520, '50 Adelaide Street', 'Brisbane', '4000');") or die(failed('createProperties'));
 
 /***** add owners table *****/
 mysqli_query($db, 
