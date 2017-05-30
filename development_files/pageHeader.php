@@ -140,7 +140,9 @@
 					
 					/* Print the logout button */
 					if (isset($_SESSION['user_type'])) {
-						echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>';
+						$loggedInUser = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM users WHERE user_type='".$_SESSION['user_type']."' AND id='".$_SESSION['user_id']."'"));
+						print_r($loggedInUser);
+						echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout ' . $loggedInUser['fName'] . ' ' . $loggedInUser['lname'] . '</a></li>';
 					}
 					
 					echo '</ul>';

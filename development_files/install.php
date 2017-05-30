@@ -56,7 +56,8 @@ mysqli_query($db,
 /***** add staff *****/
 mysqli_query($db, "
 	INSERT INTO staff (username, password, fname, lname, email, phone) VALUES 
-		('david', 'jonesb', 'David', 'Jones', 'bobby@example.com', '07 3344 5566'),
+		('david', 'david', 'David', 'Jones', 'bobby@example.com', '07 3344 5566'),
+		('staff', 'staff', 'Davids', 'Assistant', 'DavesAssistant@example.com', '07 3344 5566'),
 		('dallen', 'allend', 'David', 'Allen', 'DavidAllen@example.com', '07 3344 5566'),
 		('gavies', 'dreg', 'Greg', 'Davies', 'Greg@example.com', '07 3344 5566'),
 		('bobjones', 'jonies', 'Bob', 'Jones', 'bobby@example.com', '07 3344 5566'),
@@ -80,6 +81,7 @@ mysqli_query($db,
 /***** add tenants *****/
 mysqli_query($db, "
 	INSERT INTO tenants (username, password, fname, lname, email, phone) VALUES 
+		('tenant', 'tenant', 'Josh', 'Tenant', 'joshtenant@example.com', '07 3344 5566'),
 		('billbo', 'jackson', 'Bill', 'Jackson', 'bobby@example.com', '07 3344 5566'),
 		('danielaa', 'A-A-RON', 'Daniel', 'Aaron', 'DavidAllen@example.com', '07 3344 5566'),
 		('georgestairs', 'clipclopclipclop', 'George', 'Doorstep', 'Greg@example.com', '07 3344 5566'),
@@ -146,6 +148,7 @@ mysqli_query($db,
 /***** add owner *****/
 mysqli_query($db, "
 	INSERT INTO owners (username, password, fname, lname, email, phone) VALUES 
+		('owner', 'owner', 'Noah', 'Owner', 'amat@example.com', '07 3344 5566'),
 		('amathews', 'amat', 'Adrian', 'Mathews', 'amat@example.com', '07 3344 5566'),
 		('brichard', 'brich', 'Borris', 'Richard', 'booor@example.com', '07 3344 5566'),
 		('cc', 'cchi', 'Craig', 'Chip', 'creg@example.com', '07 3344 5566'),
@@ -207,14 +210,15 @@ mysqli_query($db,
 /***** add property view tenants table *****/
 mysqli_query($db,
     "CREATE TABLE IF NOT EXISTS property_view_tenants(
-      property_id INT NOT NULL,
+      id INT AUTO_INCREMENT,
+      property_inspection_id INT NOT NULL,
       tenant_id INT NOT NULL,
-      PRIMARY KEY (property_id)
+      PRIMARY KEY (id)
       );"
 ) or die(failed("createPropertyViewTenantsTable"));
 
 mysqli_query($db,
-    "INSERT INTO property_view_tenants(property_id, tenant_id) VALUES
+    "INSERT INTO property_view_tenants(property_inspection_id, tenant_id) VALUES
     (1, 4),
     (2, 1),
     (3, 2),
@@ -225,11 +229,11 @@ mysqli_query($db,
 /***** add tenants-owners-staff view as 'users' for login *****/
 mysqli_query($db,
 	"CREATE VIEW users AS 
-			SELECT 'owner' as user_type, ownerID as id, username, `password` FROM owners
+			SELECT 'owner' as user_type, ownerID as id, username, `password`, fName, lname FROM owners
 		UNION
-			SELECT  'staff' as user_type, staffID as id, username, `password` FROM staff
+			SELECT  'staff' as user_type, staffID as id, username, `password`, fName, lname FROM staff
 		UNION
-			SELECT  'tenant' as user_type, tenantID as id, username, `password` FROM tenants
+			SELECT  'tenant' as user_type, tenantID as id, username, `password`, fName, lname FROM tenants
 	;");
 
 function failed($at) {

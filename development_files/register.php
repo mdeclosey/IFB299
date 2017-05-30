@@ -11,7 +11,7 @@
 			isset($_POST['pw'])) {
 			$regDB = mysqli_query($db, "INSERT INTO tenants (username, password, fname,
 			lname, email, phone) VALUES('{$_POST['username']}', '{$_POST['password']}', 
-			'{$_POST['FirstName']}', '{$_POST['LastName']}', '{$_POST['email']}', '{$_POST['Phone']}')");
+			'{$_POST['fname']}', '{$_POST['lname']}', '{$_POST['email']}', '{$_POST['phone']}')");
 			
 			// check user registered successfully
 			if (!$regDB) {

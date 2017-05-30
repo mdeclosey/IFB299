@@ -288,9 +288,17 @@ if (isset($_GET['view'])) {
 						while($results = mysqli_fetch_assoc($imageQuery)){
 							echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 15em; margin-right: 2em'  class=\"img-thumbnail\">";
 						}
-					?><br><br><?php	
+				
+				/* Register button */ 
+					if (!isset($_SESSION['user_id'])) {
+						?>
+						<br><br><a href="register.php" class="btn btn-danger active" role="button" aria-pressed="true">Register Now for Inspections</a>
+						<?php
+					}?>
+					
+					<br><br><?php	
 				/* PROPERTY INSPECTION TIMES */		
-					$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']}");
+					$timesassoc = mysqli_query($db, "SELECT * FROM PropertyViews WHERE propertyID={$prop['propertyID']} ORDER BY start_datetime ASC");
 					if (mysqli_num_rows($timesassoc) > 0) {
 					?>
 				<div class="alert alert-success" role="alert">
@@ -298,9 +306,9 @@ if (isset($_GET['view'])) {
 					<?php 
 						
 						while ($propTimes = mysqli_fetch_assoc($timesassoc)) {
-							$startdate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['start_datetime']));
-							$enddate   =  date('g:ia \o\n l jS F Y', strtotime($propTimes['end_dateTime']));
-							echo "{$startdate} TO {$enddate}<br>";
+							$startdate   =  date('l jS F Y g:ia ', strtotime($propTimes['start_datetime']));
+							$enddate   =  date('g:ia', strtotime($propTimes['end_dateTime']));
+							echo "{$startdate} - {$enddate}<br>";
 						}
 					?>
 				</div>	

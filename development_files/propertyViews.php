@@ -9,7 +9,7 @@ if (isset($_GET['save'])) {
 	
         print_r($_POST);
 	
-        $update = mysqli_query($db, "UPDATE PropertyViews SET propertyID={$_POST['propertyID']}, start_datetime='{$_POST['start_datetime']}', end_dateTime='{$_POST['end_dateTime']}' WHERE id='{$_POST['id']}'");
+        $update = mysqli_query($db, "UPDATE PropertyViews SET propertyID={$_POST['propertyID']}, start_datetime='{$_POST['start_datetime']}', end_dateTime='{$_POST['end_datetime']}' WHERE id='{$_POST['id']}'");
 
         if ($update) {
             header('location: propertyViews.php'); // redirect to prevent resubmit
@@ -18,7 +18,7 @@ if (isset($_GET['save'])) {
         }
     } else {
         // new viewing
-	$update = mysqli_query($db, "INSERT INTO PropertyViews (propertyID, start_datetime, end_dateTime, staffID) VALUES('{$_POST['propertyID']}', '{$_POST['start_datetime']}', '{$_POST['end_dateTime']}','{$_POST['propertyID']}')");
+	$update = mysqli_query($db, "INSERT INTO PropertyViews (propertyID, start_datetime, end_dateTime, staffID) VALUES('{$_POST['propertyID']}', '{$_POST['start_datetime']}', '{$_POST['end_datetime']}','{$_POST['propertyID']}')");
 
         if ($update) {
             header('location: propertyViews.php'); // redirect to prevent resubmit
@@ -52,6 +52,7 @@ if (isset($_GET['delete'])) {
 if (count($_GET) == 0) {
     $viewsList = mysqli_query($db, "
 		SELECT
+		PropertyViews.id as PropertyViews_id,
 		properties.street, 
 		properties.suburb, 
 		properties.postcode,
@@ -70,10 +71,10 @@ if (count($_GET) == 0) {
     ?>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            Property List
+            Property Viewings
             <span style="float:right; margin-top: -5.5px">
 				<a href='propertyViews.php?new' class='btn btn-success btn-sm'>
-				  <span class='glyphicon glyphicon-plus'></span> New inspection form
+				  <span class='glyphicon glyphicon-plus'></span> New Viewing Schedule
 				</a>
 			</span>
         </div>
@@ -84,26 +85,26 @@ if (count($_GET) == 0) {
                     <th>#</th>
                     <th>Property</th>
                     <th>Staff</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
+                    <th>Date Time</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 while ($view = mysqli_fetch_assoc($viewsList)) {
+					$start = date('l jS F Y g:ia ', strtotime($view['start_datetime']));
+					$start_end   = $start . ' - ' . date('g:ia', strtotime($view['end_datetime']));
                     echo "
 							<tr>
-							  <th scope='row'>{$view['id']}</th>
+							  <th scope='row'>{$view['PropertyViews_id']}</th>
 							  <td>{$view['street']}, {$view['suburb']}, {$view['postcode']}</td>
 							  <td>{$view['fname']} {$view['lname']}</td>
-							  <td>{$view['start_datetime']}</td>
-							  <td>{$view['end_datetime']}</td>
+							  <td>{$start_end}</td>
 							  <td>
 								<a href='propertyViews.php?edit&id={$view['id']}' class='btn btn-success'>
 								  <span class='glyphicon glyphicon-edit'></span> Edit
 								</a>
-								<a href='propertyViews.php?delete&id={$view['id']}' class='btn btn-danger'>
+								<a href='propertyViews.php?delete&id={$view['PropertyViews_id']}' class='btn btn-danger'>
 								  <span class='glyphicon glyphicon-trash'></span> Delete
 								</a>
 							  </td>
@@ -131,9 +132,9 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 		// create mode
 		// fill an empty array representing the new tenant. for quick hacks of the existing edit form
 		$views = [
-			'propertyID' => '',
+			'id' => '',
 			'start_datetime' => '',
-			'end_dateTime' => '',
+			'end_datetime' => '',
 		];
 		
 		$action = 'New Viewing Time';
@@ -173,13 +174,13 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 				<div class="form-group row">
 				  <label for="example-email-input" class="col-2 col-form-label">Start Date</label>
 				  <div class="col-10">
-					<input class="form-control" type="date" value="<?php echo $views['start_datetime']; ?>" id="start_datetime" name="start_datetime">
+					<input class="form-control" type="datetime-local" value="<?php echo date("Y-m-d h:i:00", $views['start_datetime']); ?>" id="start_datetime" name="start_datetime">
 				  </div>
 				</div>
 				<div class="form-group row">
 				  <label for="example-url-input" class="col-2 col-form-label">End Date</label>
 				  <div class="col-10">
-					<input class="form-control" type="date" value="<?php echo $views['end_dateTime']; ?>" id="end_dateTime" name="end_dateTime">
+					<input class="form-control" type="datetime-local" value="<?php echo $views['end_datetime']; ?>" id="end_datetime" name="end_datetime">
 				  </div>
 				</div>
 				<div class="form-group row">
@@ -207,8 +208,8 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 			// Save button pressed
 			$('#save').click(function() {
 				var property = $("#propertyID");
-				var startDate = $("#start_dateTime");
-				var endDate = $("#end_dateTime");
+				var startDate = $("#start_datetime");
+				var endDate = $("#end_datetime");
 				
 				// validate form
 				if (
