@@ -33,6 +33,8 @@ include('helper.php');
 											<tr>
 											  <th>#</th>
 											  <th>Images</th>
+											  <th>Layout</th>
+											  <th>Weekly Rent</th>
 											  <th>Property</th>
 											  <th>Staff</th>
 											  <th>Owner</th>
@@ -54,8 +56,11 @@ include('helper.php');
 													while($results = mysqli_fetch_assoc($imageQuery)){
 														echo "<img src='{$results['URL_TO_IMAGE']}' style='height: 7em; margin-right: 1em'>";
 													}	  
-														  
+														
+													$carParkWord = ($property['cars'] > 1) ? 'Parks' : 'Park';														
 													echo "</td>
+														  <td>{$property['beds']} Bedrooms<br>{$property['baths']} Bathrooms<br>{$property['cars']} Car $carParkWord</td>
+														  <td>\${$property['amount_week']}</td>
 														  <td>{$property['street']}, {$property['suburb']}, {$property['postcode']}</td>
 														  <td>{$property['staff_fname']} {$property['staff_lname']}</td>
 														  <td>{$property['fName']} {$property['lname']}</td>
