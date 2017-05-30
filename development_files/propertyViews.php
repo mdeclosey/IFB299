@@ -178,13 +178,13 @@ if (isset($_GET['edit']) && isset($_GET['id']) && $_GET['id'] > 0 ||
 				<div class="form-group row">
 				  <label for="example-email-input" class="col-2 col-form-label">Start Date</label>
 				  <div class="col-10">
-					<input class="form-control" type="datetime-local" value="<?php echo date("Y-m-d h:i:00", $views['start_datetime']); ?>" id="start_datetime" name="start_datetime">
+					<input class="form-control" type="datetime-local" value="<?php echo date("Y-m-d\TH:i:00", strtotime($views['start_datetime'])); ?>" id="start_datetime" name="start_datetime">
 				  </div>
 				</div>
 				<div class="form-group row">
 				  <label for="example-url-input" class="col-2 col-form-label">End Date</label>
 				  <div class="col-10">
-					<input class="form-control" type="datetime-local" value="<?php echo $views['end_datetime']; ?>" id="end_datetime" name="end_datetime">
+					<input class="form-control" type="datetime-local" value="<?php echo date("Y-m-d\TH:i:00", strtotime($views['end_dateTime'])); ?>" id="end_datetime" name="end_datetime">
 				  </div>
 				</div>
 				<div class="form-group row">

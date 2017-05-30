@@ -64,7 +64,8 @@
 							'url' => 'properties.php',
 							'user_type' => [
 								'david',
-								'staff'
+								'staff',
+								'owner'
 							]
 						],
 						[
