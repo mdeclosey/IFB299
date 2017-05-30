@@ -166,6 +166,10 @@ mysqli_query($db,
         start_datetime DateTime NOT NULL,
 	end_dateTime DateTime NOT NULL,
         staffID INT NOT NULL,
+	bedrooms INT NOT NULL,
+	bathrooms INT NOT NULL,
+	type VARCHAR(40) NOT NULL,
+	cars INT NOT NULL,
         PRIMARY KEY (ID)
         );"
 ) or die(failed('createPropertyViewsTables'));
@@ -173,11 +177,12 @@ mysqli_query($db,
 
 /***** add property view times *****/
 mysqli_query($db, "
-    INSERT INTO PropertyViews(id, propertyID, start_datetime, end_dateTime, staffID) VALUES
-      ('1','1', '2017-06-01 12:00:00', '2017-06-01 12:15:00', '1'),
-      ('2','2', '2017-06-02 13:00:00', '2017-06-02 12:15:00', '2'),
-      ('3','3', '2017-06-03 12:00:00', '2017-06-03 12:15:00', '3'),
-      ('4','4', '2017-06-04 12:00:00', '2017-06-04 12:15:00', '4');"
+    INSERT INTO PropertyViews(id, propertyID, start_datetime, end_dateTime, staffID, bedrooms, bathrooms, type, cars) VALUES
+      ('1', '1', '10 Adelaide Street', 'Brisbane', '4000', 2, 1, 'Apartment', 1),
+		('2', '2', '20 Adelaide Street', 'Brisbane', '4000', 4, 2, 'House', 2),
+		('3', '3', '30 Adelaide Street', 'Brisbane', '4000', 3, 2, 'Duplex', 2),
+		('4', '4', '40 Adelaide Street', 'Brisbane', '4000', 3, 1, 'Flat', 1),
+		('5', '5', '50 Adelaide Street', 'Brisbane', '4000', 2, 1, 'Townhouse', 1);"
 ) or die(failed('createPropertyViews'));
 
 
