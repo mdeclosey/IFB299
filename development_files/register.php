@@ -9,7 +9,9 @@
 			isset($_POST['Phone']) &&
 			isset($_POST['email']) &&
 			isset($_POST['pw'])) {
-			$regDB = mysqli_query($db, "INSERT INTO staff...");
+			$regDB = mysqli_query($db, "INSERT INTO tenants (username, password, fname,
+			lname, email, phone) VALUES('{$_POST['username']}', '{$_POST['password']}', 
+			'{$_POST['FirstName']}', '{$_POST['LastName']}', '{$_POST['email']}', '{$_POST['Phone']}')");
 			
 			// check user registered successfully
 			if (!$regDB) {
@@ -40,7 +42,7 @@
 			<div class="form-group row">
 			  <label for="example-text-input" class="col-2 col-form-label">Password</label>
 			  <div class="col-10">
-				<input class="form-control" type="password" id="Password" name="Password">
+				<input class="form-control" type="password" id="password" name="password">
 			  </div>
 			</div>
 			<div class="form-group row">
