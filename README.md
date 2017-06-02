@@ -1,5 +1,5 @@
 # IFB299 Property Management
-##### Semester 2, 2017. Queensland University of Technology
+##### Semester 1, 2017. Queensland University of Technology
 ##### Visit http://rocky-tor-80049.herokuapp.com/
 
 ### Contributors
